@@ -2,21 +2,67 @@ import React from "react";
 
 const Slide1Template = ({ reportItem }: { reportItem: any }) => (
   <div className="flex h-full w-full p-6">
-    <div className="border-2 border-dashed border-gray-400 rounded-xl p-6 w-full bg-white shadow overflow-y-auto">
-      <div className="font-bold text-lg mb-2">{reportItem?.Title}</div>
-      <div className="mb-4">PRN: {reportItem?.PRN}</div>
-      <div className="mb-4">Status: {reportItem?.["Current State"]}</div>
-      {/* General Information */}
-      <div className="mb-2 font-semibold">General Information:</div>
-      {reportItem && reportItem["General Information"] && (
-        <ul>
-          {Object.entries(reportItem["General Information"]).map(([key, value]) => (
-            <li key={key}><strong>{key}:</strong> {String(value)}</li>
-          ))}
-        </ul>
-      )}
-      <div className="mt-3">{reportItem?.["Short Description"]}</div>
-      <div className="mt-1">{reportItem?.["Brief Description"]}</div>
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      {/* Header with Logo */}
+      <div className="flex items-center p-2">
+        <div className="text-lg font-semibold">Company logo</div>
+      </div>
+
+      {/* Out of Specification Title - White Background */}
+      <div className="text-center py-0 bg-white">
+        <div className="font-semibold" style={{ color: '#131ed2' }}>
+          {reportItem?.Title || "Out Of Specification"}
+        </div>
+      </div>
+
+      {/* Blue Header Section with Division/Project, PRN, and Status */}
+      <div className="text-[#131ed2] p-4 flex justify-between items-center" style={{ backgroundColor: '#ffffff' }}>
+        <div>
+          <div className="font-semibold mb-1">
+            <span className="text-[#131ed2]">Division/Project:</span> {reportItem?.Title || "GMP/Out of Specification"}
+          </div>
+          <div className="font-semibold">
+            <span className="text-[#131ed2]">PR#:</span> {reportItem?.PRN || "79374"}
+          </div>
+        </div>
+        <div className="font-semibold">
+          <span className="text-[#131ed2]">Current State:</span> {reportItem?.["Current State"] || "Ongoing"}
+        </div>
+      </div>
+
+      {/* General Information Header - Gray Background */}
+      <div className="bg-gray-300 px-4 py-2 border-t border-b border-gray-400">
+        <div className="font-bold text-black">General Information</div>
+      </div>
+
+      {/* General Information Fields */}
+      <div className="p-4">
+        {reportItem && reportItem["General Information"] && (
+          <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm">
+            {Object.entries(reportItem["General Information"]).map(([key, value]) => (
+              <div key={key} className="flex">
+                <span className="font-semibold text-gray-700 min-w-[140px]">{key}:</span>
+                <span className="text-gray-900">{String(value)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Additional Fields */}
+        {reportItem?.["Short Description"] && (
+          <div className="mt-4 text-sm">
+            <div className="font-semibold text-gray-700">Short Description:</div>
+            <div className="text-gray-900 mt-1">{reportItem["Short Description"]}</div>
+          </div>
+        )}
+        
+        {reportItem?.["Brief Description"] && (
+          <div className="mt-3 text-sm">
+            <div className="font-semibold text-gray-700">Brief Description:</div>
+            <div className="text-gray-900 mt-1">{reportItem["Brief Description"]}</div>
+          </div>
+        )}
+      </div>
     </div>
   </div>
 );
