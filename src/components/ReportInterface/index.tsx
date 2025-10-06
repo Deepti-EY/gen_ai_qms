@@ -10,7 +10,7 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
 
       {/* Out of Specification Title - White Background */}
       <div className="text-center py-0 bg-white">
-        <div className="font-semibold" style={{ color: '#131ed2' }}>
+        <div className="font-bold" style={{ color: '#131ed2' }}>
           {reportItem?.Title || "Out Of Specification"}
         </div>
       </div>
@@ -19,14 +19,14 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
       <div className="text-[#131ed2] p-4 flex justify-between items-center" style={{ backgroundColor: '#ffffff' }}>
         <div>
           <div className="font-semibold mb-1">
-            <span className="text-[#131ed2]">Division/Project:</span> {reportItem?.Title || "GMP/Out of Specification"}
+            <span className="text-[#131ed2]">Division/Project:</span> <span className="font-[400]">{reportItem?.Title || "GMP/Out of Specification"}</span>
           </div>
           <div className="font-semibold">
-            <span className="text-[#131ed2]">PR#:</span> {reportItem?.PRN || "79374"}
+            <span className="text-[#131ed2]">PR#:</span><span className="font-[400]">{reportItem?.PRN || "79374"}</span>
           </div>
         </div>
         <div className="font-semibold">
-          <span className="text-[#131ed2]">Current State:</span> {reportItem?.["Current State"] || "Ongoing"}
+          <span className="text-[#131ed2]">Current State:</span> <span className="text-black font-[400]">{reportItem?.["Current State"] || "Ongoing"}</span>
         </div>
       </div>
 
