@@ -40,7 +40,7 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
 
       {/* General Information Fields */}
       <div className="p-4">
-        {reportItem && reportItem["General Information"] && (
+      {reportItem && reportItem["General Information"] && (
           <div className="text-sm space-y-2">
             {/* Row 1: Record Number | Initiation Date */}
             <div className="grid grid-cols-2 gap-x-8">
@@ -186,16 +186,98 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
 // You can add more templates for Slide2, Slide3, etc.
 const Slide2Template = ({ reportItem }: { reportItem: any }) => (
   <div className="flex h-full w-full p-6">
-    <div className="border-2 border-dashed border-gray-400 rounded-xl p-6 w-full bg-white shadow overflow-y-auto">
-      <div className="font-bold text-lg mb-2">Work Bench Reviewers</div>
-      <ul>
-        {reportItem?.["Work Bench Reviewers"]?.map((r: any, i: number) => (
-          <li key={i}>
-            {r.Name} ({r.Designation}) - ID: {r["Employee ID"]}
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      <div className="p-4">
+        {/* Work Bench Reviewers Table */}
+        {reportItem?.["Work Bench Reviewers"] && reportItem["Work Bench Reviewers"].length > 0 && (
+          <div className="flex justify-center mb-6">
+            <table className="border-collapse border border-black w-auto">
+              <thead>
+                <tr className="bg-white">
+                  <th className="border border-black p-2 text-left font-semibold">Name and Department</th>
+                  <th className="border border-black p-2 text-left font-semibold">Employee ID</th>
+                  <th className="border border-black p-2 text-left font-semibold">Designation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reportItem["Work Bench Reviewers"].map((reviewer: any, i: number) => (
+                  <tr key={i}>
+                    <td className="border border-black p-2">{reviewer.Name || "XXX"}</td>
+                    <td className="border border-black p-2">{reviewer["Employee ID"] || ""}</td>
+                    <td className="border border-black p-2">{reviewer.Designation || ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Phase Ia Investigation Header */}
+        {reportItem?.Title && (
+          <>
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-4">
+              <div className="font-bold text-black">{reportItem.Title}</div>
+            </div>
+
+            {/* Workbench Evaluation */}
+            {reportItem["Work Bench Evaluation"] && (
+              <div className="mb-4">
+                <span className="font-semibold text-black">Workbench Evaluation: </span>
+                <span className="text-gray-900">{reportItem["Work Bench Evaluation"]}</span>
+              </div>
+            )}
+
+            {/* Outcomes Section */}
+            {reportItem.Outcomes && (
+              <div className="mb-4">
+                <div className="text-gray-900 mb-2">The outcomes from workbench analysis are given below</div>
+                <ul className="list-none space-y-1 ml-4">
+                  {reportItem.Outcomes.Analyst && (
+                    <li className="text-gray-900">
+                      <span className="mr-2">▶</span>
+                      <span className="font-semibold">Analyst:</span> {reportItem.Outcomes.Analyst}
+                    </li>
+                  )}
+                  {reportItem.Outcomes["Specification and STP"] && (
+                    <li className="text-gray-900">
+                      <span className="mr-2">▶</span>
+                      <span className="font-semibold">Specification and STP:</span> {reportItem.Outcomes["Specification and STP"]}
+                    </li>
+                  )}
+                  {reportItem.Outcomes["Chemicals and Reagents"] && (
+                    <li className="text-gray-900">
+                      <span className="mr-2">▶</span>
+                      <span className="font-semibold">Chemical and reagents:</span> {reportItem.Outcomes["Chemicals and Reagents"]}
           </li>
-        ))}
+                  )}
       </ul>
-      {/* Add more fields as needed */}
+              </div>
+            )}
+
+            {/* Obvious Error Identified */}
+            {reportItem["Obvious Error Identified"] && (
+              <div className="mb-3">
+                <div className="font-semibold text-black">Obvious Error Identified: {reportItem["Obvious Error Identified"]}</div>
+              </div>
+            )}
+
+            {/* If Other Obvious Error */}
+            {reportItem["If Other Obvious Error"] && (
+              <div className="mb-4">
+                <div className="font-semibold text-black">If Other Obvious Error: {reportItem["If Other Obvious Error"]}</div>
+              </div>
+            )}
+
+            {/* Evaluation Outcome */}
+            {reportItem["Evaluation Outcome"] && (
+              <div className="mb-3">
+                <span className="font-semibold text-black">Evaluation Outcome: </span>
+                <span className="text-gray-900">{reportItem["Evaluation Outcome"]}</span>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   </div>
 );
