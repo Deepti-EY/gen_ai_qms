@@ -16,7 +16,7 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
       </div>
 
       {/* Blue Header Section with Division/Project, PRN, and Status */}
-      <div className="text-[#131ed2] p-4 flex justify-between items-center" style={{ backgroundColor: '#ffffff' }}>
+      <div className="text-[#131ed2] p-4 flex justify-between items-center border-b-2 border-black" style={{ backgroundColor: '#ffffff' }}>
         <div>
           <div className="font-semibold mb-1">
             <span className="text-[#131ed2]">Division/Project:</span> <span className="font-[400]">{reportItem?.Title || "GMP/Out of Specification"}</span>
@@ -30,9 +30,12 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
         </div>
       </div>
 
+      {/* Black Line Separator */}
+      <div className="w-full bg-black mt-1"></div>
+
       {/* General Information Header - Gray Background */}
-      <div className="bg-gray-300 px-4 py-2 border-t border-b border-gray-400">
-        <div className="font-bold text-black">General Information</div>
+      <div className="bg-[#c0c0c0]  border-1 border-black">
+        <div className="font-[700] text-black">General Information</div>
       </div>
 
       {/* General Information Fields */}
