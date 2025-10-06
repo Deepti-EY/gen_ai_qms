@@ -282,6 +282,138 @@ const Slide2Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
+const Slide3Template = ({ reportItem }: { reportItem: any }) => (
+  <div className="flex h-full w-full p-6">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      <div className="p-4">
+        {/* Analyst Evaluation Section */}
+        {reportItem?.["Analyst Evaluation"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Analyst</div>
+            </div>
+            
+            <div className="space-y-2">
+              {reportItem["Analyst Evaluation"].Training && (
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Training - </span>
+                    {reportItem["Analyst Evaluation"].Training}
+                  </div>
+                </div>
+              )}
+              
+              {reportItem["Analyst Evaluation"].Specification && (
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Specification - </span>
+                    {reportItem["Analyst Evaluation"].Specification}
+                  </div>
+                </div>
+              )}
+              
+              {reportItem["Analyst Evaluation"].Sampling && (
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Sampling - </span>
+                    {reportItem["Analyst Evaluation"].Sampling}
+                  </div>
+                </div>
+              )}
+              
+              {reportItem["Analyst Evaluation"]["Test Procedure"] && (
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Test Procedure - </span>
+                    {reportItem["Analyst Evaluation"]["Test Procedure"]}
+                  </div>
+                </div>
+              )}
+              
+              {reportItem["Analyst Evaluation"]["Observation/Error"] && (
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Observation/Error - </span>
+                    {reportItem["Analyst Evaluation"]["Observation/Error"]}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Analytical Method Evaluation Section */}
+        {reportItem?.["Analytical Method Evaluation"] && (
+          <div className="mb-6">
+            <div>
+              <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+                <div className="font-bold text-black">Analytical Method</div>
+              </div>
+              
+              <div className="space-y-2">
+                {reportItem["Analytical Method Evaluation"]["Method of Analysis"] && (
+                  <div className="flex">
+                    <span className="mr-2 text-gray-900">▶</span>
+                    <div className="text-gray-900">
+                      <span className="font-semibold">Method of Analysis - </span>
+                      {reportItem["Analytical Method Evaluation"]["Method of Analysis"]}
+                    </div>
+                  </div>
+                )}
+                
+                {reportItem["Analytical Method Evaluation"]["Analytical Method Validation"] && (
+                  <div className="flex">
+                    <span className="mr-2 text-gray-900">▶</span>
+                    <div className="text-gray-900">
+                      <span className="font-semibold">Analytical Method Validation - </span>
+                      {reportItem["Analytical Method Evaluation"]["Analytical Method Validation"]}
+                    </div>
+                  </div>
+                )}
+                
+                {reportItem["Analytical Method Evaluation"]["Specification Steps"] && (
+                  <div className="flex">
+                    <span className="mr-2 text-gray-900">▶</span>
+                    <div className="text-gray-900">
+                      <span className="font-semibold">Specification Steps - </span>
+                      {reportItem["Analytical Method Evaluation"]["Specification Steps"]}
+                    </div>
+                  </div>
+                )}
+                
+                {reportItem["Analytical Method Evaluation"]["OOS"] && (
+                  <div className="flex">
+                    <span className="mr-2 text-gray-900">▶</span>
+                    <div className="text-gray-900">
+                      <span className="font-semibold">OOS - </span>
+                      {reportItem["Analytical Method Evaluation"]["OOS"]}
+                    </div>
+                  </div>
+                )}
+                
+                {reportItem["Analytical Method Evaluation"]["Observation/Error"] && (
+                  <div className="flex">
+                    <span className="mr-2 text-gray-900">▶</span>
+                    <div className="text-gray-900">
+                      <span className="font-semibold">Observation/Error - </span>
+                      {reportItem["Analytical Method Evaluation"]["Observation/Error"]}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
 const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportItem, slide }) => {
   if (!reportItem) return (
     <div className="flex h-full w-full items-center justify-center text-gray-400">
@@ -292,7 +424,8 @@ const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportI
   switch (slide) {
     case "Slide1": return <Slide1Template reportItem={reportItem} />;
     case "Slide2": return <Slide2Template reportItem={reportItem} />;
-    // Add Slide3, Slide4, etc.
+    case "Slide3": return <Slide3Template reportItem={reportItem} />;
+    // Add Slide4, Slide5, etc.
     default: return <div>Unknown slide template: {slide}</div>;
   }
 };
