@@ -471,6 +471,155 @@ const Slide4Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
+const Slide5Template = ({ reportItem }: { reportItem: any }) => (
+  <div className="flex h-full w-full p-6">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      <div className="p-4">
+        {/* Retesting HOD Review Section */}
+        {reportItem?.["Retesting HOD Review"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Retesting HOD Review</div>
+            </div>
+            
+            <div className="space-y-1">
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting HOD Review Comments: </span>
+                {reportItem["Retesting HOD Review"].Status}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting Review Completed By: </span>
+                {reportItem["Retesting HOD Review"].Comments}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting Review Completed On: </span>
+                {reportItem["Retesting HOD Review"]["Retesting Review Completed On"]}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Retesting QA Approval Section */}
+        {reportItem?.["Retesting QA Approval"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Retesting QA Approval</div>
+            </div>
+            
+            <div className="space-y-1">
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting QA Review Comments: </span>
+                {reportItem["Retesting QA Approval"].Status}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting Approved By: </span>
+                {reportItem["Retesting QA Approval"].Comments}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Retesting Approved On: </span>
+                {reportItem["Retesting QA Approval"]["Retesting Approved On"]}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* CAPA Generation Section */}
+        {reportItem?.["CAPA Generation"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] text-black px-4 py-2 text-center mb-3">
+              <div className="font-bold">CAPA generation</div>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Corrective Actions */}
+              {reportItem["CAPA Generation"]["Corrective Actions"] && (
+                <div>
+                  <div className="font-bold text-black mb-2">1. Corrective actions:</div>
+                  <div className="ml-4 space-y-1">
+                    {reportItem["CAPA Generation"]["Corrective Actions"].map((action: string, index: number) => (
+                      <div key={index} className="flex">
+                        <span className="mr-2 text-gray-900">▶</span>
+                        <div className="text-gray-900">{action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Preventive Actions */}
+              {reportItem["CAPA Generation"]["Preventive Actions"] && (
+                <div>
+                  <div className="font-bold text-black mb-2">2. Preventive actions:</div>
+                  <div className="ml-4 space-y-1">
+                    {reportItem["CAPA Generation"]["Preventive Actions"].map((action: string, index: number) => (
+                      <div key={index} className="flex">
+                        <span className="mr-2 text-gray-900">▶</span>
+                        <div className="text-gray-900">{action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Stakeholders Review Section */}
+        {reportItem?.["CAPA Generation"]?.["Stakeholders Review"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Stakeholders Review</div>
+            </div>
+            
+            <div className="space-y-3">
+              {reportItem["CAPA Generation"]["Stakeholders Review"].map((stakeholder: any, index: number) => (
+                <div key={index} className="text-gray-900">
+                  <div className="font-semibold">Stakeholders Comments: {stakeholder["Added On"]} added by {stakeholder["Added By"]} ({stakeholder.PID}):</div>
+                  <div className="ml-4">{stakeholder.Comments}</div>
+                  {index < reportItem["CAPA Generation"]["Stakeholders Review"].length - 1 && (
+                    <div className="text-center my-2">**************************************************</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Investigation Approval Section */}
+        {reportItem?.["CAPA Generation"]?.["Investigation Approval"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Investigation Approval</div>
+            </div>
+            
+            <div className="space-y-1">
+              <div className="text-gray-900">
+                <span className="font-semibold">QA Approval Comments: </span>
+                {reportItem["CAPA Generation"]["Investigation Approval"]["QA Approval Comments"]}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Investigation Approved By: </span>
+                {reportItem["CAPA Generation"]["Investigation Approval"]["Approved By"] || "Mr. C"}
+              </div>
+              <div className="text-gray-900">
+                <span className="font-semibold">Investigation Approved On: </span>
+                {reportItem["CAPA Generation"]["Investigation Approval"]["Approved On"]}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Automated Quality OOS Report Button */}
+        <div className="mt-6">
+          <div className="bg-black text-white text-center py-3 px-4 rounded">
+            <div className="font-bold">Automated Quality OOS Report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportItem, slide }) => {
   if (!reportItem) return (
     <div className="flex h-full w-full items-center justify-center text-gray-400">
@@ -483,7 +632,8 @@ const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportI
     case "Slide2": return <Slide2Template reportItem={reportItem} />;
     case "Slide3": return <Slide3Template reportItem={reportItem} />;
     case "Slide4": return <Slide4Template reportItem={reportItem} />;
-    // Add Slide5, etc.
+    case "Slide5": return <Slide5Template reportItem={reportItem} />;
+    // Add more slides as needed
     default: return <div>Unknown slide template: {slide}</div>;
   }
 };
