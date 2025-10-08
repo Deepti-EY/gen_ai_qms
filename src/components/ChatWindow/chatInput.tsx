@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { FiSend } from "react-icons/fi";
-import ToolSelector from "./toolSelector";
 
 interface Props {
   onSubmit: (message: string) => void;

@@ -3,37 +3,36 @@ import ChatInput from "./chatInput";
 import SuggestedQuestions from "./suggestedQuestions";
 import { SUGGESTED_QUESTION } from "@/app/lib/ToolList";
 import { RESPONSES } from "@/app/lib/config";
+import type { ChatStep, SuggestedQuestionMap, ReportItemData } from "@/app/lib/types";
 
 // Flatten chat steps as before
-const chatSteps = [];
+const chatSteps: ChatStep[] = [];
 Object.entries(RESPONSES.Slides).forEach(([slide, arr]) => {
-  arr.forEach((itemArr, idx) => {
+  arr.forEach((itemArr) => {
     chatSteps.push({ slide, data: itemArr[0] });
   });
 });
-
-// Map suggested question index to the appropriate report item and bot message from last index
-const suggestedQuestionMap = [
+const suggestedQuestionMap: SuggestedQuestionMap[] = [
   {
     slide: "Slide1",
-    reportItem: RESPONSES.Slides["Slide1"].slice(-1)[0][0].reportitem,
+    reportItem: (RESPONSES.Slides["Slide1"].slice(-1)[0][0] as { reportitem?: ReportItemData }).reportitem ?? null,
     botMsg: RESPONSES.Slides["Slide1"].slice(-1)[0][0].bot
   },
   {
     slide: "Slide2",
-    reportItem: RESPONSES.Slides["Slide2"].slice(-1)[0][0].reportitem,
+    reportItem: (RESPONSES.Slides["Slide2"].slice(-1)[0][0] as { reportitem?: ReportItemData }).reportitem ?? null,
     botMsg: RESPONSES.Slides["Slide2"].slice(-1)[0][0].bot
   },
   {
     slide: "Slide3",
-    reportItem: RESPONSES.Slides["Slide3"].slice(-1)[0][0].reportitem,
+    reportItem: (RESPONSES.Slides["Slide3"].slice(-1)[0][0] as { reportitem?: ReportItemData }).reportitem ?? null,
     botMsg: RESPONSES.Slides["Slide3"].slice(-1)[0][0].bot
   }
 ];
 
 interface Props {
-  chatSteps: { slide: string, data: any }[];
-  onReportUpdate: (reportItem: any, slide: string) => void;
+  chatSteps: ChatStep[];
+  onReportUpdate: (reportItem: ReportItemData, slide: string) => void;
 }
 
 const ChatWindow: React.FC<Props> = ({ chatSteps, onReportUpdate }) => {
@@ -83,7 +82,7 @@ const ChatWindow: React.FC<Props> = ({ chatSteps, onReportUpdate }) => {
         return updated;
       });
       if (chatSteps[stepIdx].data.report) {
-        onReportUpdate(chatSteps[stepIdx].data.reportitem, chatSteps[stepIdx].slide);
+        onReportUpdate(chatSteps[stepIdx].data.reportitem ?? null, chatSteps[stepIdx].slide);
       }
       setStepIdx((idx) => idx + 1);
     }, 2000);

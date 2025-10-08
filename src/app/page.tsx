@@ -4,21 +4,22 @@ import ChatWindow from "@/components/ChatWindow";
 import ReportInterface from "@/components/ReportInterface";
 import { useState } from "react";
 import { RESPONSES } from "./lib/config";
+import type { ChatStep, ReportItemData } from "./lib/types";
 // Import your JSON here
 
 // Flatten slides as per above
-const chatSteps: { slide: string, data: any }[] = [];
+const chatSteps: ChatStep[] = [];
 Object.entries(RESPONSES.Slides).forEach(([slide, arr]) => {
-  arr.forEach((itemArr: any[], idx: number) => {
+  arr.forEach((itemArr) => {
     chatSteps.push({ slide, data: itemArr[0] });
   });
 });
 
 export default function Home() {
-  const [reportItem, setReportItem] = useState<any>(null);
+  const [reportItem, setReportItem] = useState<ReportItemData>(null);
   const [slide, setSlide] = useState<string>("");
 
-  function handleReportUpdate(item: any, slideKey: string) {
+  function handleReportUpdate(item: ReportItemData, slideKey: string) {
     setReportItem(item);
     setSlide(slideKey);
   }

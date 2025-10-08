@@ -1,6 +1,20 @@
 import React from "react";
+import type { ReportItemData } from "@/app/lib/types";
 
-const Slide1Template = ({ reportItem }: { reportItem: any }) => (
+interface Reviewer {
+  Name?: string;
+  "Employee ID"?: string;
+  Designation?: string;
+}
+
+interface Stakeholder {
+  "Added On"?: string;
+  "Added By"?: string;
+  PID?: string;
+  Comments?: string;
+}
+
+const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       {/* Header with Logo */}
@@ -184,7 +198,7 @@ const Slide1Template = ({ reportItem }: { reportItem: any }) => (
 );
 
 // You can add more templates for Slide2, Slide3, etc.
-const Slide2Template = ({ reportItem }: { reportItem: any }) => (
+const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
@@ -200,7 +214,7 @@ const Slide2Template = ({ reportItem }: { reportItem: any }) => (
                 </tr>
               </thead>
               <tbody>
-                {reportItem["Work Bench Reviewers"].map((reviewer: any, i: number) => (
+                {(reportItem["Work Bench Reviewers"] as Reviewer[]).map((reviewer, i: number) => (
                   <tr key={i}>
                     <td className="border border-black p-2">{reviewer.Name || "XXX"}</td>
                     <td className="border border-black p-2">{reviewer["Employee ID"] || ""}</td>
@@ -282,7 +296,7 @@ const Slide2Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
-const Slide3Template = ({ reportItem }: { reportItem: any }) => (
+const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
@@ -414,7 +428,7 @@ const Slide3Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
-const Slide4Template = ({ reportItem }: { reportItem: any }) => (
+const Slide4Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
@@ -471,7 +485,7 @@ const Slide4Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
-const Slide5Template = ({ reportItem }: { reportItem: any }) => (
+const Slide5Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
@@ -572,11 +586,11 @@ const Slide5Template = ({ reportItem }: { reportItem: any }) => (
             </div>
             
             <div className="space-y-3">
-              {reportItem["CAPA Generation"]["Stakeholders Review"].map((stakeholder: any, index: number) => (
+              {(reportItem["CAPA Generation"]["Stakeholders Review"] as Stakeholder[]).map((stakeholder, index: number) => (
                 <div key={index} className="text-gray-900">
                   <div className="font-semibold">Stakeholders Comments: {stakeholder["Added On"]} added by {stakeholder["Added By"]} ({stakeholder.PID}):</div>
                   <div className="ml-4">{stakeholder.Comments}</div>
-                  {index < reportItem["CAPA Generation"]["Stakeholders Review"].length - 1 && (
+                  {index < (reportItem["CAPA Generation"]["Stakeholders Review"] as Stakeholder[]).length - 1 && (
                     <div className="text-center my-2">**************************************************</div>
                   )}
                 </div>
@@ -620,7 +634,7 @@ const Slide5Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
-const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportItem, slide }) => {
+const ReportInterface: React.FC<{ reportItem: ReportItemData, slide: string }> = ({ reportItem, slide }) => {
   if (!reportItem) return (
     <div className="flex h-full w-full items-center justify-center text-gray-400 overflow-hidden">
       No report to show.

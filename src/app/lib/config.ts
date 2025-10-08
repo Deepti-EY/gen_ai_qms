@@ -1,10 +1,12 @@
+import type { ResponsesConfig } from "./types";
+
 export const BACKEND_URL = "https://genome-emr-agent-be.azurewebsites.net";
 export const MAIN_APP_URL =
   "https://eygenome-genaistudio-app.azurewebsites.net";
 export const CURRENT_SUB_DOMAIN = "gen-ai-qms";
 
 
-export const RESPONSES = {
+export const RESPONSES: ResponsesConfig = {
   "Slides": {
     "Slide1": [
       [
