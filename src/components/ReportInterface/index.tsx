@@ -414,6 +414,63 @@ const Slide3Template = ({ reportItem }: { reportItem: any }) => (
   </div>
 );
 
+const Slide4Template = ({ reportItem }: { reportItem: any }) => (
+  <div className="flex h-full w-full p-6">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      <div className="p-4">
+        {/* Checklist for Laboratory OOS Investigation Section */}
+        {reportItem?.["Checklist for Laboratory OOS Investigation"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Checklist for Laboratory OOS Investigation</div>
+            </div>
+            
+            <div className="space-y-2">
+              {reportItem["Checklist for Laboratory OOS Investigation"].map((item: string, index: number) => (
+                <div key={index} className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">{item}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Past Incidents Section */}
+        {reportItem?.["Past Incidents"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Past Incidents</div>
+            </div>
+            
+            <div className="space-y-2">
+              {reportItem["Past Incidents"].map((incident: string, index: number) => (
+                <div key={index} className="flex">
+                  <span className="mr-2 text-gray-900">▶</span>
+                  <div className="text-gray-900">{incident}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Most Probable Root Cause Details Section */}
+        {reportItem?.["Most Probable Root Cause Details"] && (
+          <div className="mb-6">
+            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
+              <div className="font-bold text-black">Most Probable Root Cause Details</div>
+            </div>
+            
+            <div className="text-gray-900">
+              {reportItem["Most Probable Root Cause Details"]}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
 const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportItem, slide }) => {
   if (!reportItem) return (
     <div className="flex h-full w-full items-center justify-center text-gray-400">
@@ -425,7 +482,8 @@ const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportI
     case "Slide1": return <Slide1Template reportItem={reportItem} />;
     case "Slide2": return <Slide2Template reportItem={reportItem} />;
     case "Slide3": return <Slide3Template reportItem={reportItem} />;
-    // Add Slide4, Slide5, etc.
+    case "Slide4": return <Slide4Template reportItem={reportItem} />;
+    // Add Slide5, etc.
     default: return <div>Unknown slide template: {slide}</div>;
   }
 };
