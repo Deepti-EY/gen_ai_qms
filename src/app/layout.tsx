@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className="h-full overflow-hidden">
+      <body className="h-full overflow-hidden" suppressHydrationWarning>
         <ToastContainer />
         <div className="flex flex-col h-full overflow-hidden">
           <div className="h-16 shrink-0">
