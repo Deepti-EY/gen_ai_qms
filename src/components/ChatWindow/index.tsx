@@ -90,9 +90,9 @@ const ChatWindow: React.FC<Props> = ({ chatSteps, onReportUpdate }) => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full items-center text-sm overflow-hidden p-6">
+    <div className="flex flex-col w-full h-full items-center text-sm overflow-hidden">
       {showEmptyState ? (
-        <div className="flex flex-col items-center justify-center h-full w-full gap-6">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-6 p-6">
           <h1 className="text-2xl font-semibold text-gray-700 text-center">
             What are you looking for?
           </h1>
@@ -128,7 +128,7 @@ const ChatWindow: React.FC<Props> = ({ chatSteps, onReportUpdate }) => {
               </React.Fragment>
             ))}
           </div>
-          <div className="w-full max-w-5xl">
+          <div className="w-full max-w-5xl px-4 pb-4 shrink-0">
             <ChatInput
               onSubmit={handleSend}
             />

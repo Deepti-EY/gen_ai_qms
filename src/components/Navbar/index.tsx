@@ -34,7 +34,7 @@ const Navbar = () => {
           GENOME
         </div>
         <div className="text-xl text-white px-3 font-normal">
-        Gen AI QMS
+        Quality Management System Agent
         </div>
         <Image
           src={`${CURRENT_SUB_DOMAIN}/genomeLogo.svg`}

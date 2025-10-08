@@ -622,20 +622,26 @@ const Slide5Template = ({ reportItem }: { reportItem: any }) => (
 
 const ReportInterface: React.FC<{ reportItem: any, slide: string }> = ({ reportItem, slide }) => {
   if (!reportItem) return (
-    <div className="flex h-full w-full items-center justify-center text-gray-400">
+    <div className="flex h-full w-full items-center justify-center text-gray-400 overflow-hidden">
       No report to show.
     </div>
   );
-  // Render template based on slide
-  switch (slide) {
-    case "Slide1": return <Slide1Template reportItem={reportItem} />;
-    case "Slide2": return <Slide2Template reportItem={reportItem} />;
-    case "Slide3": return <Slide3Template reportItem={reportItem} />;
-    case "Slide4": return <Slide4Template reportItem={reportItem} />;
-    case "Slide5": return <Slide5Template reportItem={reportItem} />;
-    // Add more slides as needed
-    default: return <div>Unknown slide template: {slide}</div>;
-  }
+  // Render template based on slide - wrapped in container with overflow
+  return (
+    <div className="h-full w-full overflow-y-auto">
+      {(() => {
+        switch (slide) {
+          case "Slide1": return <Slide1Template reportItem={reportItem} />;
+          case "Slide2": return <Slide2Template reportItem={reportItem} />;
+          case "Slide3": return <Slide3Template reportItem={reportItem} />;
+          case "Slide4": return <Slide4Template reportItem={reportItem} />;
+          case "Slide5": return <Slide5Template reportItem={reportItem} />;
+          // Add more slides as needed
+          default: return <div>Unknown slide template: {slide}</div>;
+        }
+      })()}
+    </div>
+  );
 };
 
 export default ReportInterface;

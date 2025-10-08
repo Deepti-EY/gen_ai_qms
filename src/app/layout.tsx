@@ -14,14 +14,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="h-screen">
+    <html lang="en" className="h-full">
+      <body className="h-full overflow-hidden">
         <ToastContainer />
-        <div className="flex flex-col h-screen max-w-screen">
-          <div className="h-16">
+        <div className="flex flex-col h-full overflow-hidden">
+          <div className="h-16 shrink-0">
             <Navbar />
           </div>
-          <main className="flex-grow">{children}</main>
+          <main className="flex-1 overflow-hidden">{children}</main>
         </div>
       </body>
     </html>
