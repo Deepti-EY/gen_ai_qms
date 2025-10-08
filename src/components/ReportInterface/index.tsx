@@ -611,7 +611,7 @@ const Slide5Template = ({ reportItem }: { reportItem: any }) => (
 
         {/* Automated Quality OOS Report Button */}
         <div className="mt-6">
-          <div className="bg-black text-white text-center py-3 px-4 rounded">
+          <div className="bg-black text-[#ffe600] text-center py-3 px-4 rounded">
             <div className="font-bold">Automated Quality OOS Report</div>
           </div>
         </div>
