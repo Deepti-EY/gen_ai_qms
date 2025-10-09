@@ -18,10 +18,13 @@ Object.entries(RESPONSES.Slides).forEach(([slide, arr]) => {
 export default function Home() {
   const [reportItem, setReportItem] = useState<ReportItemData>(null);
   const [slide, setSlide] = useState<string>("");
+  const [showQualityButton, setShowQualityButton] = useState<boolean>(false);
 
-  function handleReportUpdate(item: ReportItemData, slideKey: string) {
+  // updated to receive isFinalForSlide flag
+  function handleReportUpdate(item: ReportItemData | null, slideKey: string, isFinalForSlide?: boolean) {
     setReportItem(item);
     setSlide(slideKey);
+    setShowQualityButton(Boolean(isFinalForSlide && slideKey === "Slide5"));
   }
 
   return (
@@ -37,8 +40,7 @@ export default function Home() {
           <ChatWindow chatSteps={chatSteps} onReportUpdate={handleReportUpdate} />
         </div>
         <div className="w-1/2 flex flex-col border-l border-gray-200 bg-gray-50 overflow-hidden min-h-0">
-          <ReportInterface reportItem={reportItem} slide={slide} />
-        </div>
+<ReportInterface reportItem={reportItem} slide={slide} showQualityButton={showQualityButton} />        </div>
       </div>
     </div>
   );

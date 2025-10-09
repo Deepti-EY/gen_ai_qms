@@ -5,7 +5,7 @@ export type ReportItemData = Record<string, any> | null;
 
 export interface ChatMessage {
   human: string | null;
-  bot: string;
+  bot: string ; // Bot can respond with multiple messages
   report: boolean;
   reportitem?: ReportItemData;
 }
@@ -27,5 +27,6 @@ export interface SuggestedQuestionMap {
   slide: string;
   reportItem: ReportItemData;
   botMsg: string;
+  flattenedIndex:string | number;
 }
 

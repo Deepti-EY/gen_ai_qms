@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useMemo, useRef, useState } from "react";
+
 import type { ReportItemData } from "@/app/lib/types";
+import { RESPONSES } from "@/app/lib/config";
 
 interface Reviewer {
   Name?: string;
@@ -13,6 +15,9 @@ interface Stakeholder {
   PID?: string;
   Comments?: string;
 }
+
+type SlideReport = { slide: string; idx: number; reportItem: ReportItemData };
+
 
 const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
@@ -485,8 +490,15 @@ const Slide4Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   </div>
 );
 
-const Slide5Template = ({ reportItem }: { reportItem: ReportItemData }) => (
-  <div className="flex h-full w-full p-6">
+const Slide5Template = ({
+  reportItem,
+  showQualityButton,
+  onDownload,
+}: {
+  reportItem: ReportItemData;
+  showQualityButton: boolean;
+  onDownload: () => void;
+}) => (  <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
         {/* Retesting HOD Review Section */}
@@ -619,41 +631,361 @@ const Slide5Template = ({ reportItem }: { reportItem: ReportItemData }) => (
                 <span className="font-semibold">Investigation Approved On: </span>
                 {reportItem["CAPA Generation"]["Investigation Approval"]["Approved On"]}
               </div>
+              <div className="mt-6">
+         {/* Render the button only when explicitly allowed */}
+        {showQualityButton && (
+          <div className="mt-6">
+            <div
+              className="bg-black text-[#ffe600] text-center py-3 px-4 rounded cursor-pointer"
+                        onClick={onDownload}
+
+            >
+               <div className="font-bold">Automated Quality OOS Report</div>
             </div>
           </div>
         )}
-
-        {/* Automated Quality OOS Report Button */}
-        <div className="mt-6">
-          <div className="bg-black text-[#ffe600] text-center py-3 px-4 rounded">
-            <div className="font-bold">Automated Quality OOS Report</div>
-          </div>
         </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   </div>
 );
 
-const ReportInterface: React.FC<{ reportItem: ReportItemData, slide: string }> = ({ reportItem, slide }) => {
-  if (!reportItem) return (
-    <div className="flex h-full w-full items-center justify-center text-gray-400 overflow-hidden">
-      No report to show.
-    </div>
-  );
-  // Render template based on slide - wrapped in container with overflow
-  return (
+/* Helper - flatten and fallback printer */
+const buildPrintableLines = (obj: any, indent = 0): string[] => {
+  const lines: string[] = [];
+  const pad = " ".repeat(indent * 2);
+
+  if (obj == null) return lines;
+
+  if (typeof obj === "string" || typeof obj === "number" || typeof obj === "boolean") {
+    lines.push(`${pad}${String(obj)}`);
+    return lines;
+  }
+
+  if (Array.isArray(obj)) {
+    obj.forEach((item) => {
+      if (typeof item === "object") {
+        lines.push(...buildPrintableLines(item, indent + 1));
+      } else {
+        lines.push(`${pad}- ${String(item)}`);
+      }
+    });
+    return lines;
+  }
+
+  Object.entries(obj).forEach(([k, v]) => {
+    if (v == null) {
+      lines.push(`${pad}${k}:`);
+    } else if (typeof v === "object") {
+      lines.push(`${pad}${k}:`);
+      lines.push(...buildPrintableLines(v, indent + 1));
+    } else {
+      lines.push(`${pad}${k}: ${String(v)}`);
+    }
+  });
+
+  return lines;
+};
+
+/*
+  ReportInterface: styled jsPDF generator (text-based)
+  - Removed the "Item N" suffix (only slide name shown)
+  - Reworked key/value rendering to put label on its own line and value wrapped below,
+    ensuring no overlapping lines.
+  - Adjusted divider drawing so lines don't overlap text (always draw after spacing).
+  - Removed "Report Link / Quality OOS Report: Quality OOS Report" rendering.
+*/
+const ReportInterface: React.FC<{
+  reportItem: ReportItemData | null;
+  slide: string;
+  showQualityButton?: boolean;
+}> = ({ reportItem, slide, showQualityButton = false }) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const allReportItems: SlideReport[] = useMemo(() => {
+    const res: SlideReport[] = [];
+    Object.entries(RESPONSES.Slides).forEach(([slideName, arr]) => {
+      arr.forEach((itemArr: any[], idx: number) => {
+        const data = itemArr[0];
+        if (data && data.report && data.reportitem) {
+          res.push({ slide: slideName, idx, reportItem: data.reportitem });
+        }
+      });
+    });
+    return res;
+  }, []);
+
+  const generatePDF = async () => {
+    if (allReportItems.length === 0) {
+      alert("No report content available for export.");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const jspdfModule = await import("jspdf");
+      const jsPDFCtor = (jspdfModule as any).jsPDF ?? (jspdfModule as any).default ?? jspdfModule;
+      if (!jsPDFCtor || typeof jsPDFCtor !== "function") {
+        console.error("jsPDF constructor not found", jspdfModule);
+        alert("Failed to load PDF generator (jsPDF).");
+        setIsGenerating(false);
+        return;
+      }
+
+      const pdf = new (jsPDFCtor as any)({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      // Layout config
+      const margin = 48;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const usableWidth = pageWidth - margin * 2;
+      let cursorY = margin;
+      const lineHeight = 16;
+
+      const ensureSpace = (needed: number) => {
+        if (cursorY + needed > pageHeight - margin) {
+          pdf.addPage();
+          cursorY = margin;
+        }
+      };
+
+      // Cover header
+      pdf.setFillColor(20, 47, 89);
+      pdf.rect(0, 0, pageWidth, 70, "F");
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(20);
+      pdf.setFont(undefined as any, "bold");
+      pdf.text("Automated Quality OOS Report", margin, 44);
+      pdf.setFontSize(10);
+      pdf.setFont(undefined as any, "normal");
+      pdf.text(`Generated: ${new Date().toLocaleString()}`, margin, 60);
+      cursorY = 90;
+
+      // Divider (draw below the header area)
+      ensureSpace(12);
+      pdf.setDrawColor(200);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, cursorY - 6, pageWidth - margin, cursorY - 6);
+      cursorY += 12;
+
+      // Helpers
+      const drawSectionTitle = (title: string) => {
+        ensureSpace(36);
+        pdf.setFontSize(14);
+        pdf.setFont(undefined as any, "bold");
+        pdf.setTextColor(20, 47, 89);
+        pdf.text(title, margin, cursorY);
+        cursorY += 18;
+        // draw divider under the title (safe position)
+        ensureSpace(12);
+        pdf.setDrawColor(230);
+        pdf.setLineWidth(0.5);
+        pdf.line(margin, cursorY - 6, pageWidth - margin, cursorY - 6);
+        cursorY += 12;
+        pdf.setTextColor(0, 0, 0);
+      };
+
+      // Put label on its own line, then value wrapped under it (avoids label/value overlap)
+      const drawKeyValue = (label: string, value: string | number | null | undefined) => {
+        ensureSpace(lineHeight);
+        pdf.setFontSize(11);
+        pdf.setFont(undefined as any, "bold");
+        const labelText = label + ":";
+        pdf.text(labelText, margin, cursorY);
+        cursorY += lineHeight;
+
+        // value lines indented
+        pdf.setFont(undefined as any, "normal");
+        const valueText = value == null ? "" : String(value);
+        const wrapped = (pdf as any).splitTextToSize(valueText, usableWidth - 18);
+        if (wrapped.length === 0) {
+          cursorY += lineHeight / 2;
+        } else {
+          wrapped.forEach((line: string) => {
+            ensureSpace(lineHeight);
+            pdf.text(line, margin + 12, cursorY);
+            cursorY += lineHeight;
+          });
+        }
+      };
+
+      const drawBulletedList = (items: string[]) => {
+        items.forEach((it) => {
+          ensureSpace(lineHeight);
+          pdf.setFont(undefined as any, "normal");
+          const wrapped = (pdf as any).splitTextToSize(it, usableWidth - 30);
+          pdf.text("•", margin + 6, cursorY);
+          wrapped.forEach((line: string, idx: number) => {
+            if (idx > 0) ensureSpace(lineHeight);
+            pdf.text(line, margin + 18, cursorY);
+            cursorY += lineHeight;
+          });
+        });
+      };
+
+      const drawReviewersTable = (rows: { Name?: string; "Employee ID"?: string; Designation?: string }[]) => {
+        if (!rows || rows.length === 0) return;
+        ensureSpace(26);
+        pdf.setFont(undefined as any, "bold");
+        pdf.setFontSize(12);
+        pdf.text("Work Bench Reviewers", margin, cursorY);
+        cursorY += 16;
+
+        // columns
+        const col1 = margin;
+        const col2 = margin + Math.round(usableWidth * 0.5);
+        const col3 = margin + Math.round(usableWidth * 0.8);
+        pdf.setFontSize(10);
+        pdf.setFont(undefined as any, "bold");
+        ensureSpace(lineHeight);
+        pdf.text("Name", col1, cursorY);
+        pdf.text("Employee ID", col2, cursorY);
+        pdf.text("Designation", col3, cursorY);
+        cursorY += 14;
+        pdf.setDrawColor(220);
+        pdf.setLineWidth(0.5);
+        pdf.line(margin, cursorY - 6, pageWidth - margin, cursorY - 6);
+        pdf.setFont(undefined as any, "normal");
+        pdf.setFontSize(10);
+
+        rows.forEach((r) => {
+          ensureSpace(16);
+          pdf.text(r.Name || "-", col1, cursorY);
+          pdf.text(r["Employee ID"] || "-", col2, cursorY);
+          pdf.text(r.Designation || "-", col3, cursorY);
+          cursorY += 16;
+        });
+
+        cursorY += 8;
+      };
+
+      // Render all slides - show only slide name (no "Item N")
+      for (let s = 0; s < allReportItems.length; s++) {
+        const slideEntry = allReportItems[s];
+
+        ensureSpace(28);
+        pdf.setFontSize(16);
+        pdf.setFont(undefined as any, "bold");
+        pdf.setTextColor(10, 24, 66);
+        pdf.text(`${slideEntry.slide}`, margin, cursorY);
+        cursorY += 20;
+        pdf.setTextColor(0, 0, 0);
+
+        const ri = slideEntry.reportItem;
+
+        // Summary section
+        drawSectionTitle("Summary");
+        if (ri.Title) drawKeyValue("Title", ri.Title);
+        if (ri["PRN"]) drawKeyValue("PRN", ri["PRN"]);
+        if (ri["Current State"]) drawKeyValue("Current State", ri["Current State"]);
+
+        // General information
+        if (ri["General Information"]) {
+          drawSectionTitle("General Information");
+          const gi = ri["General Information"];
+          drawKeyValue("Record Number", gi["Record Number"] || "");
+          drawKeyValue("Initiation Date", gi["Initiation Date"] || "");
+          drawKeyValue("Initiating Department", gi["Initiating Department"] || "");
+          drawKeyValue("Delay Justification", gi["Delay Justification"] || gi["Delay logging Justification"] || "");
+          drawKeyValue("Short Description", gi["Short Description"] || ri["Short Description"] || "");
+          drawKeyValue("Brief Description", gi["Brief Description"] || ri["Brief Description"] || "");
+          drawKeyValue("Product/Material Name", gi["Product/Material Name"] || "");
+        }
+
+        if (ri["Work Bench Reviewers"]) {
+          drawSectionTitle("Work Bench Reviewers");
+          drawReviewersTable(ri["Work Bench Reviewers"]);
+        }
+
+        if (ri["Outcomes"]) {
+          drawSectionTitle("Outcomes");
+          const outcomes = ri["Outcomes"];
+          Object.entries(outcomes).forEach(([k, v]) => {
+            drawKeyValue(k, typeof v === "string" ? v : JSON.stringify(v));
+          });
+        }
+
+        if (ri["Checklist for Laboratory OOS Investigation"]) {
+          drawSectionTitle("Checklist for Laboratory OOS Investigation");
+          drawBulletedList(ri["Checklist for Laboratory OOS Investigation"]);
+        }
+
+        if (ri["Past Incidents"]) {
+          drawSectionTitle("Past Incidents");
+          drawBulletedList(ri["Past Incidents"]);
+        }
+
+        if (ri["CAPA Generation"]) {
+          drawSectionTitle("CAPA & CAPA Generation");
+          const capa = ri["CAPA Generation"];
+          if (capa["Corrective Actions"]) {
+            drawKeyValue("Corrective Actions", "");
+            drawBulletedList(capa["Corrective Actions"]);
+          }
+          if (capa["Preventive Actions"]) {
+            drawKeyValue("Preventive Actions", "");
+            drawBulletedList(capa["Preventive Actions"]);
+          }
+          if (capa["Stakeholders Review"]) {
+            drawSectionTitle("Stakeholders Review");
+            (capa["Stakeholders Review"] as any[]).forEach((st) => {
+              drawKeyValue("Added On", st["Added On"] || "");
+              drawKeyValue("Added By", st["Added By"] || "");
+              drawKeyValue("PID", st["PID"] || "");
+              drawKeyValue("Comments", st["Comments"] || "");
+            });
+          }
+        }
+
+        // NOTE: Removed the "Report Link / Quality OOS Report" section per request
+
+        cursorY += 18;
+      }
+
+      const filename = `OOS_Report_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.pdf`;
+      pdf.save(filename);
+    } catch (err) {
+      console.error("PDF generation failed", err);
+      alert("Failed to generate PDF. See console for details.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const visible = reportItem ? (
     <div className="h-full w-full overflow-y-auto">
       {(() => {
         switch (slide) {
-          case "Slide1": return <Slide1Template reportItem={reportItem} />;
-          case "Slide2": return <Slide2Template reportItem={reportItem} />;
-          case "Slide3": return <Slide3Template reportItem={reportItem} />;
-          case "Slide4": return <Slide4Template reportItem={reportItem} />;
-          case "Slide5": return <Slide5Template reportItem={reportItem} />;
-          // Add more slides as needed
-          default: return <div>Unknown slide template: {slide}</div>;
+          case "Slide1":
+            return <Slide1Template reportItem={reportItem} />;
+          case "Slide2":
+            return <Slide2Template reportItem={reportItem} />;
+          case "Slide3":
+            return <Slide3Template reportItem={reportItem} />;
+          case "Slide4":
+            return <Slide4Template reportItem={reportItem} />;
+          case "Slide5":
+            return <Slide5Template reportItem={reportItem} showQualityButton={!!showQualityButton} onDownload={generatePDF} />;
+          default:
+            return <div>Unknown slide template: {slide}</div>;
         }
       })()}
+    </div>
+  ) : (
+    <div className="flex h-full w-full items-center justify-center text-gray-400 overflow-hidden">No report to show.</div>
+  );
+
+  return (
+    <div className="h-full w-full relative">
+      {visible}
+      {isGenerating && <div className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded">Generating PDF...</div>}
     </div>
   );
 };

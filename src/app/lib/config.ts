@@ -5,7 +5,6 @@ export const MAIN_APP_URL =
   "https://eygenome-genaistudio-app.azurewebsites.net";
 export const CURRENT_SUB_DOMAIN = "gen-ai-qms";
 
-
 export const RESPONSES: ResponsesConfig = {
   "Slides": {
     "Slide1": [
@@ -26,7 +25,7 @@ export const RESPONSES: ResponsesConfig = {
       [
         {
           "human": "Logging of the OOS was delayed due to reviewer bandwidth constraint",
-          "bot": "Thank you, basis the information provided, some immediate action needs to be taken: The sample and instrument used for analysis are to be labelled as OOS investigation underway. The Client and cross-functional team have been notified. In order to continue the manufacturing process notification has been sent to the manufacturing department to provide the lot -2 sample for testing.",
+          "bot": "Thank you, basis the information provided, some immediate action needs to be taken: The sample and instrument used for analysis are to be labelled as OOS investigation underway. The Client and cross-functional team have been notified. In order to continue the manufacturing process notification has been sent to the manufacturing department to provide the lot -2 sample for testing. Would you like to proceed with notifying the QA department as well?",
           "report": true,
           "reportitem": {
             "Title": "Out of Specification",
@@ -62,7 +61,7 @@ export const RESPONSES: ResponsesConfig = {
     "Slide2": [
       [
         {
-          "human": null,
+          "human": "Yes",
           "bot": "Basis the data provided, kindly confirm the responsible department hierarchy, to enable alert notifications and emails",
           "report": true,
           "reportitem": {
@@ -86,7 +85,7 @@ export const RESPONSES: ResponsesConfig = {
       [
         {
           "human": "No, the standards and reagents used were not degraded and the vial did not have cracks",
-          "bot": "Basis the preliminary data gathered on workbench evaluation and basis the input provided — “No obvious laboratory related error is identified for the Out of specification”",
+          "bot": "Basis the preliminary data gathered on workbench evaluation and basis the input provided — 'No obvious laboratory related error is identified for the Out of specification'. Would you like to proceed with the next phase of investigation to verify the analytical method and analyst sequence?",
           "report": true,
           "reportitem": {
             "Work Bench Reviewers": [
@@ -118,7 +117,7 @@ export const RESPONSES: ResponsesConfig = {
     "Slide3": [
       [
         {
-          "human": null,
+          "human": "Yes",
           "bot": "Basis the preliminary data, the next check on error needs to be performed on Analyst > Analytical method. Kindly confirm the sequence",
           "report": false
         }
@@ -149,7 +148,7 @@ export const RESPONSES: ResponsesConfig = {
       [
         {
           "human": "Analyst has used the validated STP (STP-GMP-QCB-0081, version No: 5.0) for analysis",
-          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No observation due to analytical method was identified.",
+          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No observation due to analytical method was identified. Would you like to proceed with verifying the system suitability and validation protocol as per the next phase checklist?",
           "report": true,
           "reportitem": {
             "Analyst Evaluation": {
@@ -173,7 +172,7 @@ export const RESPONSES: ResponsesConfig = {
     "Slide4": [
       [
         {
-          "human": null,
+          "human": "Yes",
           "bot": "Basis the Phase I investigation no assignable cause have been identified. I recommend a checklist to be followed to arrive at a probable cause. 1. Verify the initial system suitability as per STP 2. Validation of the Analytical method protocol for the given 2 STP’s",
           "report": true,
           "reportitem": {
@@ -338,5 +337,4 @@ export const RESPONSES: ResponsesConfig = {
       ]
     ]
   }
-}
-
+};
