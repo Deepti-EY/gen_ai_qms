@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 
 import type { ReportItemData } from "@/app/lib/types";
 import { RESPONSES } from "@/app/lib/config";
+import jsPDF from "jspdf";
 
 interface Reviewer {
   Name?: string;
@@ -15,6 +16,14 @@ interface Stakeholder {
   PID?: string;
   Comments?: string;
 }
+
+type RawStep = {
+  human: string | null;
+  bot?: string | string[];
+  report?: boolean;
+  reportitem?: ReportItemData;
+};
+
 
 type SlideReport = { slide: string; idx: number; reportItem: ReportItemData };
 
@@ -654,7 +663,7 @@ const Slide5Template = ({
 );
 
 /* Helper - flatten and fallback printer */
-const buildPrintableLines = (obj: any, indent = 0): string[] => {
+const buildPrintableLines = (obj: unknown, indent = 0): string[] => {
   const lines: string[] = [];
   const pad = " ".repeat(indent * 2);
 
@@ -692,11 +701,11 @@ const buildPrintableLines = (obj: any, indent = 0): string[] => {
 
 /*
   ReportInterface: styled jsPDF generator (text-based)
-  - Removed the "Item N" suffix (only slide name shown)
-  - Reworked key/value rendering to put label on its own line and value wrapped below,
-    ensuring no overlapping lines.
-  - Adjusted divider drawing so lines don't overlap text (always draw after spacing).
-  - Removed "Report Link / Quality OOS Report: Quality OOS Report" rendering.
+  - No slide names printed
+  - Labels on own line, values wrapped below
+  - Removed the Quality OOS Report link text
+  - Replaced `any` with proper types where practical
+  - Conditional drawing: only render a section title when there is content to show
 */
 const ReportInterface: React.FC<{
   reportItem: ReportItemData | null;
@@ -708,15 +717,45 @@ const ReportInterface: React.FC<{
   const allReportItems: SlideReport[] = useMemo(() => {
     const res: SlideReport[] = [];
     Object.entries(RESPONSES.Slides).forEach(([slideName, arr]) => {
-      arr.forEach((itemArr: any[], idx: number) => {
-        const data = itemArr[0];
+      arr.forEach((itemArr: unknown[]) => {
+        const data = (itemArr as unknown[])[0] as RawStep | undefined;
         if (data && data.report && data.reportitem) {
-          res.push({ slide: slideName, idx, reportItem: data.reportitem });
+          res.push({ slide: slideName, idx: res.length, reportItem: data.reportitem });
         }
       });
     });
     return res;
   }, []);
+
+  // helpers to detect whether a section has meaningful content
+  const hasSummary = (ri?: ReportItemData): boolean => {
+    if (!ri) return false;
+    if (ri.Title || ri.PRN || ri["Current State"]) return true;
+    const gi = ri["General Information"];
+    if (gi && typeof gi === "object") {
+      return Object.values(gi).some((v) => v !== undefined && v !== null && String(v).trim() !== "");
+    }
+    return false;
+  };
+
+  const hasGeneralInformation = (ri?: ReportItemData): boolean => {
+    if (!ri) return false;
+    const gi = ri["General Information"];
+    return !!(gi && Object.values(gi).some((v) => v !== undefined && v !== null && String(v).trim() !== ""));
+  };
+
+  const hasWorkBenchReviewers = (ri?: ReportItemData): ri is ReportItemData & { "Work Bench Reviewers": Reviewer[] } =>
+    !!(ri && Array.isArray(ri["Work Bench Reviewers"]) && (ri["Work Bench Reviewers"] as Reviewer[]).length > 0);
+
+  const hasOutcomes = (ri?: ReportItemData): boolean => !!(ri && ri["Outcomes"] && Object.keys(ri["Outcomes"]).length > 0);
+
+  const hasChecklist = (ri?: ReportItemData): boolean =>
+    !!(ri && Array.isArray(ri["Checklist for Laboratory OOS Investigation"]) && ri["Checklist for Laboratory OOS Investigation"].length > 0);
+
+  const hasPastIncidents = (ri?: ReportItemData): boolean =>
+    !!(ri && Array.isArray(ri["Past Incidents"]) && ri["Past Incidents"].length > 0);
+
+  const hasCAPA = (ri?: ReportItemData): boolean => !!(ri && ri["CAPA Generation"] && Object.keys(ri["CAPA Generation"]).length > 0);
 
   const generatePDF = async () => {
     if (allReportItems.length === 0) {
@@ -727,15 +766,18 @@ const ReportInterface: React.FC<{
     setIsGenerating(true);
     try {
       const jspdfModule = await import("jspdf");
-      const jsPDFCtor = (jspdfModule as any).jsPDF ?? (jspdfModule as any).default ?? jspdfModule;
-      if (!jsPDFCtor || typeof jsPDFCtor !== "function") {
+const jsPDFCtor = (jspdfModule as typeof import("jspdf")).jsPDF 
+  ?? (jspdfModule as typeof import("jspdf")).default 
+  ?? jsPDF;
+        if (!jsPDFCtor || typeof jsPDFCtor !== "function") {
         console.error("jsPDF constructor not found", jspdfModule);
         alert("Failed to load PDF generator (jsPDF).");
         setIsGenerating(false);
         return;
       }
 
-      const pdf = new (jsPDFCtor as any)({
+      // Instantiate typed jsPDF
+      const pdf = new (jsPDFCtor as new (opts?: { orientation?: string; unit?: string; format?: string }) => import("jspdf").jsPDF)({
         orientation: "portrait",
         unit: "pt",
         format: "a4",
@@ -761,10 +803,10 @@ const ReportInterface: React.FC<{
       pdf.rect(0, 0, pageWidth, 70, "F");
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(20);
-      pdf.setFont(undefined as any, "bold");
+       pdf.setFont("helvetica", "bold");
       pdf.text("Automated Quality OOS Report", margin, 44);
       pdf.setFontSize(10);
-      pdf.setFont(undefined as any, "normal");
+      pdf.setFont("helvetica", "normal");
       pdf.text(`Generated: ${new Date().toLocaleString()}`, margin, 60);
       cursorY = 90;
 
@@ -779,7 +821,7 @@ const ReportInterface: React.FC<{
       const drawSectionTitle = (title: string) => {
         ensureSpace(36);
         pdf.setFontSize(14);
-        pdf.setFont(undefined as any, "bold");
+        pdf.setFont("helvetica",  "bold");
         pdf.setTextColor(20, 47, 89);
         pdf.text(title, margin, cursorY);
         cursorY += 18;
@@ -792,19 +834,18 @@ const ReportInterface: React.FC<{
         pdf.setTextColor(0, 0, 0);
       };
 
-      // Put label on its own line, then value wrapped under it (avoids label/value overlap)
       const drawKeyValue = (label: string, value: string | number | null | undefined) => {
         ensureSpace(lineHeight);
         pdf.setFontSize(11);
-        pdf.setFont(undefined as any, "bold");
+        pdf.setFont("helvetica", "bold");
         const labelText = label + ":";
         pdf.text(labelText, margin, cursorY);
         cursorY += lineHeight;
 
         // value lines indented
-        pdf.setFont(undefined as any, "normal");
+        pdf.setFont("helvetica", "normal");
         const valueText = value == null ? "" : String(value);
-        const wrapped = (pdf as any).splitTextToSize(valueText, usableWidth - 18);
+        const wrapped = pdf.splitTextToSize(valueText, usableWidth - 18);
         if (wrapped.length === 0) {
           cursorY += lineHeight / 2;
         } else {
@@ -819,8 +860,8 @@ const ReportInterface: React.FC<{
       const drawBulletedList = (items: string[]) => {
         items.forEach((it) => {
           ensureSpace(lineHeight);
-          pdf.setFont(undefined as any, "normal");
-          const wrapped = (pdf as any).splitTextToSize(it, usableWidth - 30);
+          pdf.setFont("helvetica", "normal");
+          const wrapped = pdf.splitTextToSize(it, usableWidth - 30);
           pdf.text("•", margin + 6, cursorY);
           wrapped.forEach((line: string, idx: number) => {
             if (idx > 0) ensureSpace(lineHeight);
@@ -830,10 +871,10 @@ const ReportInterface: React.FC<{
         });
       };
 
-      const drawReviewersTable = (rows: { Name?: string; "Employee ID"?: string; Designation?: string }[]) => {
+      const drawReviewersTable = (rows: Reviewer[]) => {
         if (!rows || rows.length === 0) return;
         ensureSpace(26);
-        pdf.setFont(undefined as any, "bold");
+        pdf.setFont("helvetica", "bold");
         pdf.setFontSize(12);
         pdf.text("Work Bench Reviewers", margin, cursorY);
         cursorY += 16;
@@ -843,7 +884,7 @@ const ReportInterface: React.FC<{
         const col2 = margin + Math.round(usableWidth * 0.5);
         const col3 = margin + Math.round(usableWidth * 0.8);
         pdf.setFontSize(10);
-        pdf.setFont(undefined as any, "bold");
+        pdf.setFont("helvetica", "bold");
         ensureSpace(lineHeight);
         pdf.text("Name", col1, cursorY);
         pdf.text("Employee ID", col2, cursorY);
@@ -852,7 +893,7 @@ const ReportInterface: React.FC<{
         pdf.setDrawColor(220);
         pdf.setLineWidth(0.5);
         pdf.line(margin, cursorY - 6, pageWidth - margin, cursorY - 6);
-        pdf.setFont(undefined as any, "normal");
+        pdf.setFont("helvetica", "normal");
         pdf.setFontSize(10);
 
         rows.forEach((r) => {
@@ -866,76 +907,74 @@ const ReportInterface: React.FC<{
         cursorY += 8;
       };
 
-      // Render all slides - show only slide name (no "Item N")
+      // Render all slides — NO slide name printed (per request)
       for (let s = 0; s < allReportItems.length; s++) {
-        const slideEntry = allReportItems[s];
+        const ri = allReportItems[s].reportItem;
 
-        ensureSpace(28);
-        pdf.setFontSize(16);
-        pdf.setFont(undefined as any, "bold");
-        pdf.setTextColor(10, 24, 66);
-        pdf.text(`${slideEntry.slide}`, margin, cursorY);
-        cursorY += 20;
-        pdf.setTextColor(0, 0, 0);
-
-        const ri = slideEntry.reportItem;
-
-        // Summary section
-        drawSectionTitle("Summary");
-        if (ri.Title) drawKeyValue("Title", ri.Title);
-        if (ri["PRN"]) drawKeyValue("PRN", ri["PRN"]);
-        if (ri["Current State"]) drawKeyValue("Current State", ri["Current State"]);
+        // Summary section — only if there is content
+        if (hasSummary(ri)) {
+          drawSectionTitle("Summary");
+          if (ri?.Title) drawKeyValue("Title", ri?.Title);
+          if (ri?.PRN) drawKeyValue("PRN", ri?.PRN);
+          if (ri?.["Current State"]) drawKeyValue("Current State", ri?.["Current State"]);
+        }
 
         // General information
-        if (ri["General Information"]) {
+        if (hasGeneralInformation(ri)) {
           drawSectionTitle("General Information");
-          const gi = ri["General Information"];
-          drawKeyValue("Record Number", gi["Record Number"] || "");
-          drawKeyValue("Initiation Date", gi["Initiation Date"] || "");
-          drawKeyValue("Initiating Department", gi["Initiating Department"] || "");
-          drawKeyValue("Delay Justification", gi["Delay Justification"] || gi["Delay logging Justification"] || "");
-          drawKeyValue("Short Description", gi["Short Description"] || ri["Short Description"] || "");
-          drawKeyValue("Brief Description", gi["Brief Description"] || ri["Brief Description"] || "");
-          drawKeyValue("Product/Material Name", gi["Product/Material Name"] || "");
+          const gi = ri?.["General Information"] || {};
+          drawKeyValue("Record Number", (gi as Record<string, undefined>)["Record Number"] || "");
+          drawKeyValue("Initiation Date", (gi as Record<string, undefined>)["Initiation Date"] || "");
+          drawKeyValue("Initiating Department", (gi as Record<string, undefined>)["Initiating Department"] || "");
+          drawKeyValue(
+            "Delay Justification",
+            (gi as Record<string, undefined>)["Delay Justification"] ||
+              (gi as Record<string, undefined>)["Delay logging Justification"] ||
+              ""
+          );
+          drawKeyValue("Short Description", (gi as Record<string, undefined>)["Short Description"] || ri?.["Short Description"] || "");
+          drawKeyValue("Brief Description", (gi as Record<string, undefined>)["Brief Description"] || ri?.["Brief Description"] || "");
+          drawKeyValue("Product/Material Name", (gi as Record<string, undefined>)["Product/Material Name"] || "");
         }
 
-        if (ri["Work Bench Reviewers"]) {
+        if (hasWorkBenchReviewers(ri)) {
           drawSectionTitle("Work Bench Reviewers");
-          drawReviewersTable(ri["Work Bench Reviewers"]);
+          drawReviewersTable(ri["Work Bench Reviewers"] as Reviewer[]);
         }
 
-        if (ri["Outcomes"]) {
+        if (hasOutcomes(ri)) {
           drawSectionTitle("Outcomes");
-          const outcomes = ri["Outcomes"];
+          const outcomes = ri?.["Outcomes"] as Record<string, unknown>;
           Object.entries(outcomes).forEach(([k, v]) => {
             drawKeyValue(k, typeof v === "string" ? v : JSON.stringify(v));
           });
         }
 
-        if (ri["Checklist for Laboratory OOS Investigation"]) {
+        if (hasChecklist(ri)) {
           drawSectionTitle("Checklist for Laboratory OOS Investigation");
-          drawBulletedList(ri["Checklist for Laboratory OOS Investigation"]);
+          drawBulletedList(ri?.["Checklist for Laboratory OOS Investigation"] as string[]);
         }
 
-        if (ri["Past Incidents"]) {
+        if (hasPastIncidents(ri)) {
           drawSectionTitle("Past Incidents");
-          drawBulletedList(ri["Past Incidents"]);
+          drawBulletedList(ri?.["Past Incidents"] as string[]);
         }
 
-        if (ri["CAPA Generation"]) {
+        if (hasCAPA(ri)) {
           drawSectionTitle("CAPA & CAPA Generation");
-          const capa = ri["CAPA Generation"];
-          if (capa["Corrective Actions"]) {
+          const capa = ri?.["CAPA Generation"] as Record<string, unknown>;
+          if (Array.isArray(capa["Corrective Actions"])) {
             drawKeyValue("Corrective Actions", "");
-            drawBulletedList(capa["Corrective Actions"]);
+            drawBulletedList(capa["Corrective Actions"] as string[]);
           }
-          if (capa["Preventive Actions"]) {
+          if (Array.isArray(capa["Preventive Actions"])) {
             drawKeyValue("Preventive Actions", "");
-            drawBulletedList(capa["Preventive Actions"]);
+            drawBulletedList(capa["Preventive Actions"] as string[]);
           }
-          if (capa["Stakeholders Review"]) {
+          if (Array.isArray(capa["Stakeholders Review"])) {
             drawSectionTitle("Stakeholders Review");
-            (capa["Stakeholders Review"] as any[]).forEach((st) => {
+            const stakeholders = capa["Stakeholders Review"] as Stakeholder[];
+            stakeholders.forEach((st) => {
               drawKeyValue("Added On", st["Added On"] || "");
               drawKeyValue("Added By", st["Added By"] || "");
               drawKeyValue("PID", st["PID"] || "");
@@ -943,8 +982,6 @@ const ReportInterface: React.FC<{
             });
           }
         }
-
-        // NOTE: Removed the "Report Link / Quality OOS Report" section per request
 
         cursorY += 18;
       }
