@@ -250,94 +250,56 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
 const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      {/* Phase Ia Investigation Header */}
+      <div className="bg-[#C0C0C0] text-black px-4 py-2 border-1 border-black font-bold text-lg">
+        Phase Ia Investigation
+      </div>
+
       <div className="p-4">
-        {/* Work Bench Reviewers Table */}
-        {reportItem?.["Work Bench Reviewers"] && reportItem["Work Bench Reviewers"].length > 0 && (
-          <div className="flex justify-center mb-6">
-            <table className="border-collapse border border-black w-auto">
-              <thead>
-                <tr className="bg-white">
-                  <th className="border border-black p-2 text-left font-semibold">Name and Department</th>
-                  <th className="border border-black p-2 text-left font-semibold">Employee ID</th>
-                  <th className="border border-black p-2 text-left font-semibold">Designation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(reportItem["Work Bench Reviewers"] as Reviewer[]).map((reviewer, i: number) => (
-                  <tr key={i}>
-                    <td className="border border-black p-2">{reviewer.Name || "XXX"}</td>
-                    <td className="border border-black p-2">{reviewer["Employee ID"] || ""}</td>
-                    <td className="border border-black p-2">{reviewer.Designation || ""}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {reportItem?.Title && (
-          <>
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-4">
-              <div className="font-bold text-black">{reportItem.Title}</div>
-            </div>
+        {/* Workbench evaluation section */}
+        <div className="mb-4">
+          <div className="font-bold text-black mb-2">Workbench evaluation:</div>
+          <div className="text-gray-900 mb-4">The outcomes from workbench analysis are given below</div>
+          
+          {/* Bulleted list of outcomes */}
+          <ul className="list-none space-y-1 ml-4">
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Analyst:</span> The analyst qualification report was verified and found appropriate
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Specification and STP:</span> No discrepancy were observed with respect to procedure details mentioned
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Chemical and reagents:</span> Chemicals were within the expiry date. The caps and vials were sealed properly.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Power outage:</span> Basis the logbook of the instrument no power outage was observed.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Calculation:</span> Verified the calculations and the details of the values entered in the observation data sheet and the validated excel sheet, there were no discrepancy observed with the calculations.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Instrument settings:</span> The instrument method was created by reviewer and the analyst has selected the desired method while executing the analysis.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Sample with Batch No.:</span> AA22000062 was recorded and no discrepancies were observed.
+            </li>
+          </ul>
+        </div>
 
-            {/* Workbench Evaluation */}
-            {reportItem["Work Bench Evaluation"] && (
-              <div className="mb-4">
-                <span className="font-semibold text-black">Workbench Evaluation: </span>
-                <span className="text-gray-900">{reportItem["Work Bench Evaluation"]}</span>
-              </div>
-            )}
-
-            {/* Outcomes Section */}
-            {reportItem.Outcomes && (
-              <div className="mb-4">
-                <div className="text-gray-900 mb-2">The outcomes from workbench analysis are given below</div>
-                <ul className="list-none space-y-1 ml-4">
-                  {reportItem.Outcomes.Analyst && (
-                    <li className="text-gray-900">
-                      <span className="mr-2">▶</span>
-                      <span className="font-semibold">Analyst:</span> {reportItem.Outcomes.Analyst}
-                    </li>
-                  )}
-                  {reportItem.Outcomes["Specification and STP"] && (
-                    <li className="text-gray-900">
-                      <span className="mr-2">▶</span>
-                      <span className="font-semibold">Specification and STP:</span> {reportItem.Outcomes["Specification and STP"]}
-                    </li>
-                  )}
-                  {reportItem.Outcomes["Chemicals and Reagents"] && (
-                    <li className="text-gray-900">
-                      <span className="mr-2">▶</span>
-                      <span className="font-semibold">Chemical and reagents:</span> {reportItem.Outcomes["Chemicals and Reagents"]}
-          </li>
-                  )}
-      </ul>
-              </div>
-            )}
-
-            {/* Obvious Error Identified */}
-            {reportItem["Obvious Error Identified"] && (
-              <div className="mb-3">
-                <div className="font-semibold text-black">Obvious Error Identified: {reportItem["Obvious Error Identified"]}</div>
-              </div>
-            )}
-
-            {/* If Other Obvious Error */}
-            {reportItem["If Other Obvious Error"] && (
-              <div className="mb-4">
-                <div className="font-semibold text-black">If Other Obvious Error: {reportItem["If Other Obvious Error"]}</div>
-              </div>
-            )}
-
-            {/* Evaluation Outcome */}
-            {reportItem["Evaluation Outcome"] && (
-              <div className="mb-3">
-                <span className="font-semibold text-black">Evaluation Outcome: </span>
-                <span className="text-gray-900">{reportItem["Evaluation Outcome"]}</span>
-              </div>
-            )}
-          </>
-        )}
+        {/* Obvious Error Identified Box */}
+        <div className="border border-black p-4 mb-4">
+          <div className="font-bold text-black">Obvious Error Identified: <span className="font-normal text-gray-900">No</span></div>
+          <div className="font-bold text-black">If Other Obvious Error: <span className="font-normal text-gray-900">NA</span></div>
+          <div className="font-bold text-black">Evaluation Outcome: <span className="font-normal text-gray-900">Based on Phase 1A investigation no obvious error was identified for the reported OOS. Further investigation shall be performed to identified the assignable cause.</span></div>
+        </div>
       </div>
     </div>
   </div>
