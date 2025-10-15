@@ -44,17 +44,17 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
       </div>
 
       {/* Blue Header Section with Division/Project, PRN, and Status */}
-      <div className="text-[#131ed2] p-4 flex justify-between items-center border-b-2 border-black" style={{ backgroundColor: '#ffffff' }}>
-        <div>
-          <div className="font-semibold mb-1">
-            <span className="text-[#131ed2]">Division/Project:</span> <span className="font-[400]">{reportItem?.Title || "GMP/Out of Specification"}</span>
-          </div>
-          <div className="font-semibold">
+      <div className="text-[#131ed2] p-4 border-b-2 border-black" style={{ backgroundColor: '#ffffff' }}>
+        <div className="font-semibold mb-1">
+          <span className="text-[#131ed2]">Division/Project:</span> <span className="font-[400]">{reportItem?.Title || "GMP/Out of Specification"}</span>
+        </div>
+        <div className="font-semibold flex justify-between items-center">
+          <div>
             <span className="text-[#131ed2]">PR#:</span><span className="font-[400]">{reportItem?.PRN || "79374"}</span>
           </div>
-        </div>
-        <div className="font-semibold">
-          <span className="text-[#131ed2]">Current State:</span> <span className="text-black font-[400]">{reportItem?.["Current State"] || "Ongoing"}</span>
+          <div>
+            <span className="text-[#131ed2]">Current State:</span> <span className="text-black font-[400]">{reportItem?.["Current State"] || "Ongoing"}</span>
+          </div>
         </div>
       </div>
 
@@ -74,11 +74,11 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
             <div className="grid grid-cols-2 gap-x-8">
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Record Number:</span>
-                <span className="text-gray-900">{reportItem["General Information"]["Record Number"] || ""}</span>
+                <span className="text-gray-900">{reportItem["General Information"]["Record Number"] || "ABC/GMP/OOS/2023-0044"}</span>
               </div>
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Initiation Date:</span>
-                <span className="text-gray-900">{reportItem["General Information"]["Initiation Date"] || ""}</span>
+                <span className="text-gray-900">{reportItem["General Information"]["Initiation Date"] || "23-02-2023 08:36"}</span>
               </div>
             </div>
 
@@ -86,7 +86,7 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
             <div className="grid grid-cols-2 gap-x-8">
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Initiator:</span>
-                <span className="text-gray-900">{reportItem["General Information"]["Initiator"] || ""}</span>
+                <span className="text-gray-900">{reportItem["General Information"]["Initiator"] || "Mr A"}</span>
               </div>
               <div></div>
             </div>
@@ -95,7 +95,7 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
             <div className="grid grid-cols-2 gap-x-8">
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Initial TCD:</span>
-                <span className="text-gray-900">{reportItem["General Information"]["Initial TCD"] || ""}</span>
+                <span className="text-gray-900">{reportItem["General Information"]["Initial TCD"] || "25-03-2023"}</span>
               </div>
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Revised TCD:</span>
@@ -111,98 +111,133 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
               </div>
               <div className="flex">
                 <span className="font-semibold text-black min-w-[180px]">Date of Occurrence:</span>
-                <span className="text-gray-900">{reportItem["General Information"]["Date of Occurrence"] || ""}</span>
+                <span className="text-gray-900">{reportItem["General Information"]["Date of Occurrence"] || "22-02-2023 23:23"}</span>
               </div>
             </div>
 
-            {/* Row 5: Delay logging Justification */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Delay logging Justification:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Delay logging Justification"] || ""}</span>
-            </div>
-
-            {/* Row 6: Initiating Department */}
+            {/* Row 5: Initiating Department */}
             <div className="flex">
               <span className="font-semibold text-black min-w-[180px]">Initiating Department:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Initiating Department"] || ""}</span>
+              <span className="text-gray-900">{reportItem["General Information"]["Initiating Department"] || "Quality Control"}</span>
             </div>
 
-            {/* Row 7: OOS Department */}
+            {/* Row 6: OOS Department */}
             <div className="flex">
               <span className="font-semibold text-black min-w-[180px]">OOS Department:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["OOS Department"] || ""}</span>
+              <span className="text-gray-900">{reportItem["General Information"]["OOS Department"] || "Quality Control"}</span>
             </div>
 
-            {/* Row 8: Operating Unit */}
+            {/* Row 7: Operating Unit */}
             <div className="flex">
               <span className="font-semibold text-black min-w-[180px]">Operating Unit:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Operating Unit"] || ""}</span>
+              <span className="text-gray-900">{reportItem["General Information"]["Operating Unit"] || "Unit X"}</span>
             </div>
 
-            {/* Row 9: Location */}
+            {/* Row 8: Location */}
             <div className="flex">
               <span className="font-semibold text-black min-w-[180px]">Location:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Location"] || ""}</span>
-            </div>
-
-            {/* Short Description */}
-            <div className="mt-3">
-              <div className="font-semibold text-black">Short Description:</div>
-              <div className="text-gray-900 mt-1">{reportItem["General Information"]["Short Description"] || reportItem?.["Short Description"] || ""}</div>
+              <span className="text-gray-900">{reportItem["General Information"]["Location"] || "Hyderabad"}</span>
             </div>
 
             {/* Brief Description */}
             <div className="mt-3">
-              <div className="font-semibold text-black">Brief Description:</div>
-              <div className="text-gray-900 mt-1">{reportItem["General Information"]["Brief Description"] || reportItem?.["Brief Description"] || ""}</div>
+              <div className="flex">
+                <span className="font-semibold text-black min-w-[180px]">Brief Description:</span>
+                <div className="flex flex-col">
+                <span className="text-gray-900">{reportItem["General Information"]["Brief Description"] || reportItem?.["Brief Description"] || "On 22-02-2023, poloxamer content test was performed for in process samples of ABC-00508841 Batch no: AB22000062, stage Kolliphor P188 bio 3% stock by the analyst Mr C (Emp ID: 10028810), as per STP No: STP-GMP-QCB-0081, version No: 5.0 and the analysis was performed using HPLC instrument ID:S/QCB/QCI/065/01. Analyst Mr. B (Emp ID: 10029835), verified the initial system suitability and the analysis was completed on 22-02-2023. After completion of poloxamer analysis, the data was compiled and the obtained results were found to be out of specification (Specification No: SPEC-GMP-QCB-5FG-830001939-IPS-0002). The data was reviewed and identified OOS on 22 Feb 2023 by Mr B (employee ID: 10026333) and OOS was reported in Trackwise on 23 Feb 2023 by Mr A (Emp ID: 10025300)."}</span>
+             <div className="flex py-10">
+             <div>
+                <div className="font-semibold text-black mb-2">Obtained results are as follows:</div>
+                <div className="text-gray-900 space-y-1">
+                  <div>Injection-01: 32.20 g/L</div>
+                  <div>Injection-02: 32.16 g/L</div>
+                  <div>Injection-03: 31.32 g/L</div>
+                  <div>Average three triplicate injection results: 31.9 g/L</div>
+                </div>
+              </div>
+              <div>
+                <div className="font-semibold text-black mb-2">Desired State:</div>
+                <div className="text-gray-900">The specification limit is 30.0 ±1.5 g/L</div>
+              </div>
+              </div>
+              </div>
+              </div>
+            </div>
+            {/* Product and Test Information Section */}
+            <div className="mt-4 grid grid-cols-2 gap-x-8">
+              <div className="space-y-2">
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Product/Material Name:</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Product /Material Name"] || "Product X (ABC-00508841)"}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Sample Type:</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Sample Type"] || "Other"}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Batch Type:</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Batch Type"] || "Commercial Batch"}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Test Method Ref. Version No.:</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Test Method Ref. Version No."] || "5.0"}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Pack Details (if Any):</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Pack Details (if Any)"] || "NA"}</span>
+                </div>
+                <div className="flex">
+                  <span className="font-semibold text-black min-w-[180px]">Test Name:</span>
+                  <span className="text-gray-900">{reportItem["General Information"]["Test Name"] || "Poloxamer content"}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Product/Material Name */}
-            <div className="flex mt-3">
-              <span className="font-semibold text-black min-w-[180px]">Product /Material Name:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Product /Material Name"] || ""}</span>
-            </div>
-
-            {/* Sample Type */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Sample Type:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Sample Type"] || ""}</span>
-            </div>
-
-            {/* Others */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Others:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Others"] || ""}</span>
-            </div>
-
-            {/* Batch Type */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Batch Type:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Batch Type"] || ""}</span>
-            </div>
-
-            {/* Pack Details */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Pack Details (if Any):</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Pack Details (if Any)"] || ""}</span>
-            </div>
-
-            {/* Test Name */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Test Name:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Test Name"] || ""}</span>
-            </div>
-
-            {/* Test Method Reference No */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Test Method Reference No:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Test Method Reference No"] || ""}</span>
-            </div>
-
-            {/* Test Method Ref. Version No */}
-            <div className="flex">
-              <span className="font-semibold text-black min-w-[180px]">Test Method Ref. Version No.:</span>
-              <span className="text-gray-900">{reportItem["General Information"]["Test Method Ref. Version No."] || ""}</span>
+            {/* Batch Details Section */}
+            <div className="mt-4">
+              <div className="flex">
+                <span className="font-semibold text-black min-w-[180px]">Batch Details:</span>
+                <div className="flex-1 grid grid-cols-2 gap-x-8">
+                  <div className="space-y-2">
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Batch No:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Batch No"] || "AA22000062"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">AR No:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["AR No"] || "200915"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Storage conditions:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Storage conditions"] || "2-8°c"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Inspection Lot No:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Inspection Lot No"] || "0000030586"}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Batch Size/QTY:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Batch Size/QTY"] || "50000 tablets"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Mfg date:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Mfg date"] || "25-02-2023"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Expiry date:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Expiry date"] || "25-02-2025"}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="text-black min-w-[120px]">Remarks:</span>
+                      <span className="text-gray-900">{reportItem["General Information"]["Remarks"] || "NA"}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

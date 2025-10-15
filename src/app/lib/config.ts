@@ -42,7 +42,7 @@ export const RESPONSES: ResponsesConfig = {
               "Revised TCD": "25-Mar-2023",
               "Initial TCD": "23-Feb-2023",
               "Date of Occurrence": "22-Feb-2023 23:23",
-              "Actual Closure Date": "Ongoing",
+              "Actual Closure Date": "",
               "Delay Justification": "Reviewer bandwidth constraints",
               "Short Description": "Out of specification result observed in poloxamer content for ZTS-00508841 mAb of Batch No:LF22000602 at the stage of Kolliphor P188 bio 3% stock in process(IPC 42).",
               "Brief Description": "On 22 Feb 2023, poloxamer content test was performed for in process samples of ZTS-00508841 Batch no:LF22000602, stage Kolliphor P188 bio 3% stock by the analyst (Emp ID:10028810).",

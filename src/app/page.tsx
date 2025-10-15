@@ -36,10 +36,10 @@ export default function Home() {
         </a>
       </div>
       <div className="flex w-full flex-1 overflow-hidden min-h-0">
-        <div className="w-1/2 flex flex-col overflow-hidden min-h-0">
+        <div className="w-2/5 flex flex-col overflow-hidden min-h-0">
           <ChatWindow  onReportUpdate={handleReportUpdate} />
         </div>
-        <div className="w-1/2 flex flex-col border-l border-gray-200 bg-gray-50 overflow-hidden min-h-0">
+        <div className="w-3/5 flex flex-col border-l border-gray-200 bg-gray-50 overflow-hidden min-h-0">
 <ReportInterface reportItem={reportItem} slide={slide} showQualityButton={showQualityButton} />        </div>
       </div>
     </div>
