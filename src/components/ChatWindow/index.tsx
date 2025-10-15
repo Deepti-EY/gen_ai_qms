@@ -50,9 +50,10 @@ const suggestedQuestionMap: SuggestedQuestionMap[] = [
 interface Props {
   // onReportUpdate now accepts third arg: isFinalForSlide boolean
   onReportUpdate: (reportItem: ReportItemData | null, slide: string, isFinalForSlide?: boolean) => void;
+  currentReportItem?: ReportItemData | null;
 }
 
-const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
+const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
   const [history, setHistory] = useState<{ user?: string; bot?: string | string[]; thinking?: boolean; checkbox?: boolean }[]>([]);
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -201,6 +202,19 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
       // Add user message and continue processing
       setHistory((prev) => [...prev, { user: selectedText }]);
       
+      // Check if this is the "Proceed to draft the OOS report" option
+      if (selectedText === "Proceed to draft the OOS report") {
+        // Trigger the report interface to show the draft button
+        // Keep the existing report data and just set the final flag
+        onReportUpdate(currentReportItem, "Slide5", true);
+        
+        // Add a confirmation message
+        setHistory((prev) => [...prev, { 
+          bot: "Please click the 'OOS Investigation Report Draft 1' button below to generate and download the report." 
+        }]);
+        return;
+      }
+      
       const next = await processFromIndex(stepIdx);
       setStepIdx(next);
     }
@@ -208,11 +222,9 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
 
   const handleProceedClick = async () => {
     if (isProcessing) return;
-    
-    // Add a user message indicating they clicked proceed
+
     setHistory((prev) => [...prev, { user: "Proceed" }]);
     
-    // Continue processing from current step
     const next = await processFromIndex(stepIdx);
     setStepIdx(next);
   };
@@ -282,7 +294,7 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
                           <button
                             onClick={handleProceedClick}
                             disabled={isProcessing}
-                            className="bg-black hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                            className="bg-black text-white px-4 py-2 rounded-lg font-medium transition-colors"
                           >
                             Proceed
                           </button>
