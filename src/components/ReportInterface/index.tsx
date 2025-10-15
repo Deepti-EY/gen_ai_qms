@@ -541,7 +541,7 @@ const Slide5Template = ({
         {showQualityButton && (
           <div className="mt-6">
             <div
-               className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3"
+               className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3 cursor-pointer"
               onClick={onDownload}
             >
               <div className="font-bold">OOS Investigation Report Draft 1</div>
