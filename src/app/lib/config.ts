@@ -58,6 +58,61 @@ export const RESPONSES: ResponsesConfig = {
         }
       ]
     ],
+    "Slide2": [
+      [
+        {
+          "human": "Yes",
+          "bot": "Basis the preliminary data, the next check on error needs to be performed on Analyst > Analytical method. Kindly confirm the sequence",
+          "report": false
+        }
+      ],
+      [
+        {
+          "human": "The sequence seems fine, kindly proceed with generation of report",
+          "bot": "Please provide below details which would help me in generating the Phase I report - Analyst evaluation: “Whether the analyst understood the test procedures of specifications?”",
+          "report": false
+        }
+      ],
+      [
+        {
+          "human": "Yes, analyst is qualified and understood the procedure mentioned in STP",
+          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No error was identified for the observed OOS by the analyst.",
+          "report": true,
+          "reportitem": {
+            "Analyst Evaluation": {
+              "Training": "Sampling activity was performed by manufacturing site and submitted to QCB for in process analysis.",
+              "Specification": "Analyst has followed correct specification SPEC-GMP-QCB-SFG-030001939-IPS-0002, version No: 2.0.",
+              "Sampling": "The sample was appropriately labelled with Batch No. LF22000602 which has the stage '3% Kolliphor stock' and matches with the information in the TRF.",
+              "Test Procedure": "Analyst is qualified and understood the procedure mentioned in STP (STP-GMP-QCB-0081, version No: 5.0).",
+              "Observation/Error": "Based on Phase I investigation no error was identified for the observed OOS by the analyst."
+            }
+          }
+        }
+      ],
+      [
+        {
+          "human": "Analyst has used the validated STP (STP-GMP-QCB-0081, version No: 5.0) for analysis",
+          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No observation due to analytical method was identified. Would you like to proceed with verifying the system suitability and validation protocol as per the next phase checklist?",
+          "report": true,
+          "reportitem": {
+            "Analyst Evaluation": {
+              "Training": "Sampling activity was performed by manufacturing site and submitted to QCB for in process analysis.",
+              "Specification": "Analyst has followed correct specification SPEC-GMP-QCB-SFG-030001939-IPS-0002, version No: 2.0.",
+              "Sampling": "The sample was appropriately labelled with Batch No. LF22000602 which has the stage '3% Kolliphor stock' and matches with the information in the TRF.",
+              "Test Procedure": "Analyst is qualified and understood the procedure mentioned in STP (STP-GMP-QCB-0081, version No: 5.0).",
+              "Observation/Error": "Based on Phase I investigation no error was identified for the observed OOS by the analyst."
+            },
+            "Analytical Method Evaluation": {
+              "Method of Analysis": "Analyst has used the STP (STP-GMP-QCB-0081, version No: 5.0) for analysis, which is in line with current STP.",
+              "Analytical Method Validation": "Yes, Analytical method is validated.",
+              "Specification Steps": "Analysis steps are clearly provided in the STP, and which are adequate to perform Poloxamer content analysis.",
+              "OOS": "Yes, OOS result was reported within the variability.",
+              "Observation/Error": "No observation due to analytical method was identified."
+            }
+          }
+        }
+      ]
+    ],
     "Slide3": [
       [
         {
@@ -114,61 +169,7 @@ export const RESPONSES: ResponsesConfig = {
         }
       ]
     ],
-    "Slide2": [
-      [
-        {
-          "human": "Yes",
-          "bot": "Basis the preliminary data, the next check on error needs to be performed on Analyst > Analytical method. Kindly confirm the sequence",
-          "report": false
-        }
-      ],
-      [
-        {
-          "human": "The sequence seems fine, kindly proceed with generation of report",
-          "bot": "Please provide below details which would help me in generating the Phase I report - Analyst evaluation: “Whether the analyst understood the test procedures of specifications?”",
-          "report": false
-        }
-      ],
-      [
-        {
-          "human": "Yes, analyst is qualified and understood the procedure mentioned in STP",
-          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No error was identified for the observed OOS by the analyst.",
-          "report": true,
-          "reportitem": {
-            "Analyst Evaluation": {
-              "Training": "Sampling activity was performed by manufacturing site and submitted to QCB for in process analysis.",
-              "Specification": "Analyst has followed correct specification SPEC-GMP-QCB-SFG-030001939-IPS-0002, version No: 2.0.",
-              "Sampling": "The sample was appropriately labelled with Batch No. LF22000602 which has the stage '3% Kolliphor stock' and matches with the information in the TRF.",
-              "Test Procedure": "Analyst is qualified and understood the procedure mentioned in STP (STP-GMP-QCB-0081, version No: 5.0).",
-              "Observation/Error": "Based on Phase I investigation no error was identified for the observed OOS by the analyst."
-            }
-          }
-        }
-      ],
-      [
-        {
-          "human": "Analyst has used the validated STP (STP-GMP-QCB-0081, version No: 5.0) for analysis",
-          "bot": "Basis the preliminary data gathered on analyst evaluation and basis the input provided — No observation due to analytical method was identified. Would you like to proceed with verifying the system suitability and validation protocol as per the next phase checklist?",
-          "report": true,
-          "reportitem": {
-            "Analyst Evaluation": {
-              "Training": "Sampling activity was performed by manufacturing site and submitted to QCB for in process analysis.",
-              "Specification": "Analyst has followed correct specification SPEC-GMP-QCB-SFG-030001939-IPS-0002, version No: 2.0.",
-              "Sampling": "The sample was appropriately labelled with Batch No. LF22000602 which has the stage '3% Kolliphor stock' and matches with the information in the TRF.",
-              "Test Procedure": "Analyst is qualified and understood the procedure mentioned in STP (STP-GMP-QCB-0081, version No: 5.0).",
-              "Observation/Error": "Based on Phase I investigation no error was identified for the observed OOS by the analyst."
-            },
-            "Analytical Method Evaluation": {
-              "Method of Analysis": "Analyst has used the STP (STP-GMP-QCB-0081, version No: 5.0) for analysis, which is in line with current STP.",
-              "Analytical Method Validation": "Yes, Analytical method is validated.",
-              "Specification Steps": "Analysis steps are clearly provided in the STP, and which are adequate to perform Poloxamer content analysis.",
-              "OOS": "Yes, OOS result was reported within the variability.",
-              "Observation/Error": "No observation due to analytical method was identified."
-            }
-          }
-        }
-      ]
-    ],
+   
     "Slide4": [
       [
         {

@@ -245,66 +245,6 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
     </div>
   </div>
 );
-
-// You can add more templates for Slide2, Slide3, etc.
-const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
-  <div className="flex h-full w-full p-6">
-    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
-      {/* Phase Ia Investigation Header */}
-      <div className="bg-[#C0C0C0] text-black px-4 py-2 border-1 border-black font-bold text-lg">
-        Phase Ia Investigation
-      </div>
-
-      <div className="p-4">
-        {/* Workbench evaluation section */}
-        <div className="mb-4">
-          <div className="font-bold text-black mb-2">Workbench evaluation:</div>
-          <div className="text-gray-900 mb-4">The outcomes from workbench analysis are given below</div>
-          
-          {/* Bulleted list of outcomes */}
-          <ul className="list-none space-y-1 ml-4">
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Analyst:</span> The analyst qualification report was verified and found appropriate
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Specification and STP:</span> No discrepancy were observed with respect to procedure details mentioned
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Chemical and reagents:</span> Chemicals were within the expiry date. The caps and vials were sealed properly.
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Power outage:</span> Basis the logbook of the instrument no power outage was observed.
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Calculation:</span> Verified the calculations and the details of the values entered in the observation data sheet and the validated excel sheet, there were no discrepancy observed with the calculations.
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Instrument settings:</span> The instrument method was created by reviewer and the analyst has selected the desired method while executing the analysis.
-            </li>
-            <li className="text-gray-900">
-              <span className="mr-2">▶</span>
-              <span className="font-semibold">Sample with Batch No.:</span> AA22000062 was recorded and no discrepancies were observed.
-            </li>
-          </ul>
-        </div>
-
-        {/* Obvious Error Identified Box */}
-        <div className="border border-black p-4 mb-4">
-          <div className="font-bold text-black">Obvious Error Identified: <span className="font-normal text-gray-900">No</span></div>
-          <div className="font-bold text-black">If Other Obvious Error: <span className="font-normal text-gray-900">NA</span></div>
-          <div className="font-bold text-black">Evaluation Outcome: <span className="font-normal text-gray-900">Based on Phase 1A investigation no obvious error was identified for the reported OOS. Further investigation shall be performed to identified the assignable cause.</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
 const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
@@ -375,6 +315,65 @@ const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
     </div>
   </div>
 );
+// You can add more templates for Slide2, Slide3, etc.
+const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
+  <div className="flex h-full w-full p-6">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+      {/* Phase Ia Investigation Header */}
+      <div className="bg-[#C0C0C0] text-black px-4 py-2 border-1 border-black font-bold text-lg">
+        Phase Ia Investigation
+      </div>
+
+      <div className="p-4">
+        {/* Workbench evaluation section */}
+        <div className="mb-4">
+          <div className="font-bold text-black mb-2">Workbench evaluation:</div>
+          <div className="text-gray-900 mb-4">The outcomes from workbench analysis are given below</div>
+          
+          {/* Bulleted list of outcomes */}
+          <ul className="list-none space-y-1 ml-4">
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Analyst:</span> The analyst qualification report was verified and found appropriate
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Specification and STP:</span> No discrepancy were observed with respect to procedure details mentioned
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Chemical and reagents:</span> Chemicals were within the expiry date. The caps and vials were sealed properly.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Power outage:</span> Basis the logbook of the instrument no power outage was observed.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Calculation:</span> Verified the calculations and the details of the values entered in the observation data sheet and the validated excel sheet, there were no discrepancy observed with the calculations.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Instrument settings:</span> The instrument method was created by reviewer and the analyst has selected the desired method while executing the analysis.
+            </li>
+            <li className="text-gray-900">
+              <span className="mr-2">▶</span>
+              <span className="font-semibold">Sample with Batch No.:</span> AA22000062 was recorded and no discrepancies were observed.
+            </li>
+          </ul>
+        </div>
+
+        {/* Obvious Error Identified Box */}
+        <div className="border border-black p-4 mb-4">
+          <div className="font-bold text-black">Obvious Error Identified: <span className="font-normal text-gray-900">No</span></div>
+          <div className="font-bold text-black">If Other Obvious Error: <span className="font-normal text-gray-900">NA</span></div>
+          <div className="font-bold text-black">Evaluation Outcome: <span className="font-normal text-gray-900">Based on Phase 1A investigation no obvious error was identified for the reported OOS. Further investigation shall be performed to identified the assignable cause.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 
 const Slide4Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
