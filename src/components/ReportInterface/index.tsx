@@ -377,56 +377,99 @@ const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
 
 const Slide4Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
-    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-[#F3F3F5] shadow overflow-y-auto">
       <div className="p-4">
-        {/* Checklist for Laboratory OOS Investigation Section */}
-        {reportItem?.["Checklist for Laboratory OOS Investigation"] && (
+        <div className="mb-6">
           <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Checklist for Laboratory OOS Investigation</div>
+            <div className="font-semibold text-xl bg-[#D1EBFE] text-gray-700  text-center w-full">Most probable root cause details</div>
+          </div>
+          
+          <div className="space-y-3 mb-6">
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="">Root Cause 1:</span> Incorrect blank correction where negative values were not corrected prior to sample reading
+              </div>
             </div>
             
-            <div className="space-y-2">
-              {reportItem["Checklist for Laboratory OOS Investigation"].map((item: string, index: number) => (
-                <div key={index} className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">{item}</div>
-                </div>
-              ))}
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="">Root Cause 2:</span> Possibility of dilution error during the sample preparation Differences in Calibration curve levels, sample dilution volumes, standard and sample
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="">Root Cause 3:</span> Error in loading the injection volumes which could potentially result in variation sample
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="">Root Cause 4:</span> The intrusive nature of Poloxamer (which can be difficult to dissolve or requires temperature control) and needs to be completely dissolved in the solvent before injection, leading to a low/variable result sample.
+              </div>
+            </div>
+            
+            {/* Additional Input Field */}
+            <div className="flex items-start mt-4">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="flex-1">
+                <input 
+                  type="text" 
+                  placeholder="Mention the details of root cause if any...." 
+                  className="w-full px-3 py-2 border border-gray-300 rounded text-gray-500 italic"
+                />
+              </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Past Incidents Section */}
-        {reportItem?.["Past Incidents"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Past Incidents</div>
-            </div>
-            
-            <div className="space-y-2">
-              {reportItem["Past Incidents"].map((incident: string, index: number) => (
-                <div key={index} className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">{incident}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    
 
-        {/* Most Probable Root Cause Details Section */}
-        {reportItem?.["Most Probable Root Cause Details"] && (
+        {/* Root cause Checklists Section */}
+        <div className="mb-6">
           <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Most Probable Root Cause Details</div>
+            <div className="font-semibold text-xl bg-[#D1EBFE] text-gray-700 text-center w-full">Root cause Checklists</div>
+          </div>
+          
+          {/* Checklist Items */}
+          <div className="space-y-3">
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="font-semibold">Root Cause1:</span> 
+                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist1</span>
+              </div>
             </div>
             
-            <div className="text-gray-900">
-              {reportItem["Most Probable Root Cause Details"]}
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="font-semibold">Root Cause2:</span> 
+                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist2</span>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="font-semibold">Root Cause3:</span> 
+                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist3</span>
+              </div>
+            </div>
+            
+            <div className="flex items-start">
+              <span className="mr-3 text-black text-xl">✓</span>
+              <div className="text-gray-900">
+                <span className="font-semibold">Root Cause4:</span> 
+                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist4</span>
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   </div>
