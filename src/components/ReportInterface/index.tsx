@@ -484,152 +484,73 @@ const Slide5Template = ({
   showQualityButton: boolean;
   onDownload: () => void;
 }) => (  <div className="flex h-full w-full p-6">
-    <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
+    <div className="border-2 border-gray-300 rounded-lg w-full bg-[#F3F3F5] shadow overflow-y-auto">
       <div className="p-4">
-        {/* Retesting HOD Review Section */}
-        {reportItem?.["Retesting HOD Review"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Retesting HOD Review</div>
+        {/* Final root cause Section - TOP */}
+        <div className="mb-6">
+          <div className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3">
+            <div className="font-bold">Final root cause</div>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex">
+              <span className="text-black mr-2">Outcome:</span>
+              <span className="text-gray-900">Basis the results obtained during the verification of the methodologies, concentration of sample is equal to defined sample preparation concentrations as per STP.</span>
             </div>
-            
-            <div className="space-y-1">
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting HOD Review Comments: </span>
-                {reportItem["Retesting HOD Review"].Status}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting Review Completed By: </span>
-                {reportItem["Retesting HOD Review"].Comments}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting Review Completed On: </span>
-                {reportItem["Retesting HOD Review"]["Retesting Review Completed On"]}
-              </div>
+            <div className="flex">
+              <span className="text-black mr-2">Conclusion:</span>
+              <span className="text-gray-900">The method was found to precise and equivalent and probable variation is in turn due to calibration curve characteristics involving complex preparations in terms of lower dilutions [(0.334 ml to 10 ml with Micropipette)] Which has an impact on the quantification of Poloxamer.</span>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Retesting QA Approval Section */}
-        {reportItem?.["Retesting QA Approval"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Retesting QA Approval</div>
-            </div>
-            
-            <div className="space-y-1">
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting QA Review Comments: </span>
-                {reportItem["Retesting QA Approval"].Status}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting Approved By: </span>
-                {reportItem["Retesting QA Approval"].Comments}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Retesting Approved On: </span>
-                {reportItem["Retesting QA Approval"]["Retesting Approved On"]}
-              </div>
-            </div>
+        {/* CAPA Generation Section - MIDDLE */}
+        <div className="mb-6">
+          <div className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3">
+            <div className="font-bold">CAPA generation</div>
           </div>
-        )}
-
-        {/* CAPA Generation Section */}
-        {reportItem?.["CAPA Generation"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] text-black px-4 py-2 text-center mb-3">
-              <div className="font-bold">CAPA generation</div>
-            </div>
-            
-            <div className="space-y-4">
-              {/* Corrective Actions */}
-              {reportItem["CAPA Generation"]["Corrective Actions"] && (
-                <div>
-                  <div className="font-bold text-black mb-2">1. Corrective actions:</div>
-                  <div className="ml-4 space-y-1">
-                    {reportItem["CAPA Generation"]["Corrective Actions"].map((action: string, index: number) => (
-                      <div key={index} className="flex">
-                        <span className="mr-2 text-gray-900">▶</span>
-                        <div className="text-gray-900">{action}</div>
-                      </div>
-                    ))}
-                  </div>
+          
+          <div className="space-y-4">
+            {/* Corrective Actions */}
+            <div>
+              <div className="text-black mb-2">1. Corrective actions:</div>
+              <div className="ml-4 space-y-1">
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">b)</span>
+                  <div className="text-gray-900">Training to be imparted to the analysts to be more vigilant while performing the dilutions.</div>
                 </div>
-              )}
-
-              {/* Preventive Actions */}
-              {reportItem["CAPA Generation"]["Preventive Actions"] && (
-                <div>
-                  <div className="font-bold text-black mb-2">2. Preventive actions:</div>
-                  <div className="ml-4 space-y-1">
-                    {reportItem["CAPA Generation"]["Preventive Actions"].map((action: string, index: number) => (
-                      <div key={index} className="flex">
-                        <span className="mr-2 text-gray-900">▶</span>
-                        <div className="text-gray-900">{action}</div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex">
+                  <span className="mr-2 text-gray-900">c)</span>
+                  <div className="text-gray-900">Version No:5.0 is revised in line with the STP, to scale up dilution without changing the final concentration.</div>
                 </div>
-              )}
+              </div>
+            </div>
+
+            {/* Preventive Actions */}
+            <div>
+              <div className=" text-black mb-2">2. Preventive actions:</div>
+              <div className="ml-4 space-y-1">
+                <div className="flex">
+ 
+                  <div className="text-gray-900">Version No:5.0 has explicit instructions to perform the dilutions.</div>
+                </div>
+              </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Stakeholders Review Section */}
-        {reportItem?.["CAPA Generation"]?.["Stakeholders Review"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Stakeholders Review</div>
-            </div>
-            
-            <div className="space-y-3">
-              {(reportItem["CAPA Generation"]["Stakeholders Review"] as Stakeholder[]).map((stakeholder, index: number) => (
-                <div key={index} className="text-gray-900">
-                  <div className="font-semibold">Stakeholders Comments: {stakeholder["Added On"]} added by {stakeholder["Added By"]} ({stakeholder.PID}):</div>
-                  <div className="ml-4">{stakeholder.Comments}</div>
-                  {index < (reportItem["CAPA Generation"]["Stakeholders Review"] as Stakeholder[]).length - 1 && (
-                    <div className="text-center my-2">**************************************************</div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    
 
-        {/* Investigation Approval Section */}
-        {reportItem?.["CAPA Generation"]?.["Investigation Approval"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Investigation Approval</div>
-            </div>
-            
-            <div className="space-y-1">
-              <div className="text-gray-900">
-                <span className="font-semibold">QA Approval Comments: </span>
-                {reportItem["CAPA Generation"]["Investigation Approval"]["QA Approval Comments"]}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Investigation Approved By: </span>
-                {reportItem["CAPA Generation"]["Investigation Approval"]["Approved By"] || "Mr. C"}
-              </div>
-              <div className="text-gray-900">
-                <span className="font-semibold">Investigation Approved On: </span>
-                {reportItem["CAPA Generation"]["Investigation Approval"]["Approved On"]}
-              </div>
-              <div className="mt-6">
-         {/* Render the button only when explicitly allowed */}
+  
+
+        {/* Render the button at the very bottom */}
         {showQualityButton && (
           <div className="mt-6">
             <div
-              className="bg-black text-[#ffe600] text-center py-3 px-4 rounded cursor-pointer"
-                        onClick={onDownload}
-
+               className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3"
+              onClick={onDownload}
             >
-               <div className="font-bold">Automated Quality OOS Report</div>
-            </div>
-          </div>
-        )}
-        </div>
+              <div className="font-bold">OOS Investigation Report Draft 1</div>
             </div>
           </div>
         )}
