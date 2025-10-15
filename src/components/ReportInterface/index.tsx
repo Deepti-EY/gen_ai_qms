@@ -247,7 +247,7 @@ const Slide1Template = ({ reportItem }: { reportItem: ReportItemData }) => (
 );
 
 // You can add more templates for Slide2, Slide3, etc.
-const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
+const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">
@@ -274,8 +274,6 @@ const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
             </table>
           </div>
         )}
-
-        {/* Phase Ia Investigation Header */}
         {reportItem?.Title && (
           <>
             <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-4">
@@ -345,7 +343,7 @@ const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   </div>
 );
 
-const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
+const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
       <div className="p-4">

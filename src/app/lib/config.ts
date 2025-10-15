@@ -58,7 +58,7 @@ export const RESPONSES: ResponsesConfig = {
         }
       ]
     ],
-    "Slide2": [
+    "Slide3": [
       [
         {
           "human": "Yes",
@@ -114,7 +114,7 @@ export const RESPONSES: ResponsesConfig = {
         }
       ]
     ],
-    "Slide3": [
+    "Slide2": [
       [
         {
           "human": "Yes",
