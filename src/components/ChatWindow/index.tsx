@@ -20,13 +20,18 @@ const lastIndexOfSlide = (slideKey: string) => {
   return -1;
 };
 
+// Helper function to extract first bot message as string
+const getFirstBotMessage = (bot: string | string[]): string => {
+  return Array.isArray(bot) ? bot[0] : bot;
+};
+
 const suggestedQuestionMap: SuggestedQuestionMap[] = [
   {
     slide: "Slide1",
     reportItem:
       (RESPONSES.Slides["Slide1"].slice(-1)[0][0] as { reportitem?: ReportItemData })
         .reportitem ?? null,
-    botMsg: RESPONSES.Slides["Slide1"].slice(-1)[0][0].bot,
+    botMsg: getFirstBotMessage(RESPONSES.Slides["Slide1"].slice(-1)[0][0].bot),
     flattenedIndex: lastIndexOfSlide("Slide1"),
   },
   {
@@ -34,7 +39,7 @@ const suggestedQuestionMap: SuggestedQuestionMap[] = [
     reportItem:
       (RESPONSES.Slides["Slide2"].slice(-1)[0][0] as { reportitem?: ReportItemData })
         .reportitem ?? null,
-    botMsg: RESPONSES.Slides["Slide2"].slice(-1)[0][0].bot,
+    botMsg: getFirstBotMessage(RESPONSES.Slides["Slide2"].slice(-1)[0][0].bot),
     flattenedIndex: lastIndexOfSlide("Slide2"),
   },
   {
@@ -42,7 +47,7 @@ const suggestedQuestionMap: SuggestedQuestionMap[] = [
     reportItem:
       (RESPONSES.Slides["Slide3"].slice(-1)[0][0] as { reportitem?: ReportItemData })
         .reportitem ?? null,
-    botMsg: RESPONSES.Slides["Slide3"].slice(-1)[0][0].bot,
+    botMsg: getFirstBotMessage(RESPONSES.Slides["Slide3"].slice(-1)[0][0].bot),
     flattenedIndex: lastIndexOfSlide("Slide3"),
   },
 ];
@@ -86,7 +91,6 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
     let i = startIdx;
     const FIRST_DELAY = 1000;
     const FOLLOW_UP_DELAY = 600;
-    let lastProcessedIndex = -1;
 
     while (i < chatSteps.length) {
       const step = chatSteps[i];
@@ -138,7 +142,6 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
             });
           }
         }
-        lastProcessedIndex = i; // mark that we displayed this step (lastProcessedIndex refers to flattened step)
       }
 
       i += 1;
@@ -188,27 +191,25 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
   const handleCheckboxClick = async (messageIdx: number, optionIdx: number) => {
     if (isProcessing) return;
     
-    // Update selected option
+  
     setSelectedOptions(prev => ({
       ...prev,
       [messageIdx]: optionIdx
     }));
 
-    // Get the selected option text
+
     const historyItem = history[messageIdx];
     if (historyItem.bot && Array.isArray(historyItem.bot)) {
       const selectedText = historyItem.bot[optionIdx];
       
-      // Add user message and continue processing
+   
       setHistory((prev) => [...prev, { user: selectedText }]);
       
-      // Check if this is the "Proceed to draft the OOS report" option
+
       if (selectedText === "Proceed to draft the OOS report") {
-        // Trigger the report interface to show the draft button
-        // Keep the existing report data and just set the final flag
-        onReportUpdate(currentReportItem, "Slide5", true);
-        
-        // Add a confirmation message
+
+        onReportUpdate(currentReportItem ?? null, "Slide5", true);
+
         setHistory((prev) => [...prev, { 
           bot: "Please click the 'OOS Investigation Report Draft 1' button below to generate and download the report." 
         }]);
@@ -229,7 +230,8 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
     setStepIdx(next);
   };
 
-  const shouldShowProceedButton = (botMessage: string | string[]): boolean => {
+  const shouldShowProceedButton = (botMessage: string | string[] | undefined): boolean => {
+    if (!botMessage) return false;
     if (typeof botMessage === 'string') {
       return botMessage.toLowerCase().includes('proceed');
     }
@@ -290,7 +292,7 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
                         </div>
                       ) : shouldShowProceedButton(item.bot) ? (
                         <div className="text-gray-900 space-y-3">
-                          <div>{typeof item.bot === 'string' ? item.bot : item.bot[0]}</div>
+                          <div>{item.bot && (typeof item.bot === 'string' ? item.bot : item.bot[0])}</div>
                           <button
                             onClick={handleProceedClick}
                             disabled={isProcessing}

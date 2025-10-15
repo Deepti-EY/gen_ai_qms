@@ -257,7 +257,7 @@ const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
       {/* Introduction paragraph */}
       <div className="p-4 text-sm">
         <p className="text-gray-900">
-          Basis the verification of Track wise history from 22 Feb 2022 to 23 Feb 2023 for the OOS incidents in poloxamer content at the stage of 'Kolliphor P188 bio 3% stock' in process, the details are as follows
+          Basis the verification of Track wise history from 22 Feb 2022 to 23 Feb 2023 for the OOS incidents in poloxamer content at the stage of &apos;Kolliphor P188 bio 3% stock&apos; in process, the details are as follows
         </p>
       </div>
 
