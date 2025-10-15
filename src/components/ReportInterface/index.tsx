@@ -346,130 +346,69 @@ const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
 const Slide2Template = ({ reportItem }: { reportItem: ReportItemData }) => (
   <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-white shadow overflow-y-auto">
-      <div className="p-4">
-        {/* Analyst Evaluation Section */}
-        {reportItem?.["Analyst Evaluation"] && (
-          <div className="mb-6">
-            <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-              <div className="font-bold text-black">Analyst</div>
-            </div>
-            
-            <div className="space-y-2">
-              {reportItem["Analyst Evaluation"].Training && (
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">
-                    <span className="font-semibold">Training - </span>
-                    {reportItem["Analyst Evaluation"].Training}
-                  </div>
-                </div>
-              )}
-              
-              {reportItem["Analyst Evaluation"].Specification && (
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">
-                    <span className="font-semibold">Specification - </span>
-                    {reportItem["Analyst Evaluation"].Specification}
-                  </div>
-                </div>
-              )}
-              
-              {reportItem["Analyst Evaluation"].Sampling && (
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">
-                    <span className="font-semibold">Sampling - </span>
-                    {reportItem["Analyst Evaluation"].Sampling}
-                  </div>
-                </div>
-              )}
-              
-              {reportItem["Analyst Evaluation"]["Test Procedure"] && (
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">
-                    <span className="font-semibold">Test Procedure - </span>
-                    {reportItem["Analyst Evaluation"]["Test Procedure"]}
-                  </div>
-                </div>
-              )}
-              
-              {reportItem["Analyst Evaluation"]["Observation/Error"] && (
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">▶</span>
-                  <div className="text-gray-900">
-                    <span className="font-semibold">Observation/Error - </span>
-                    {reportItem["Analyst Evaluation"]["Observation/Error"]}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+      <div className="text-center py-4" style={{ backgroundColor: '#d1ebfe' }}>
+        <div className="font-semibold text-lg" style={{ color: '#191919' }}>
+          Product History
+        </div>
+      </div>
 
-        {/* Analytical Method Evaluation Section */}
-        {reportItem?.["Analytical Method Evaluation"] && (
-          <div className="mb-6">
-            <div>
-              <div className="bg-[#c0c0c0] px-4 py-2 border border-black mb-3">
-                <div className="font-bold text-black">Analytical Method</div>
-              </div>
-              
-              <div className="space-y-2">
-                {reportItem["Analytical Method Evaluation"]["Method of Analysis"] && (
-                  <div className="flex">
-                    <span className="mr-2 text-gray-900">▶</span>
-                    <div className="text-gray-900">
-                      <span className="font-semibold">Method of Analysis - </span>
-                      {reportItem["Analytical Method Evaluation"]["Method of Analysis"]}
-                    </div>
-                  </div>
-                )}
-                
-                {reportItem["Analytical Method Evaluation"]["Analytical Method Validation"] && (
-                  <div className="flex">
-                    <span className="mr-2 text-gray-900">▶</span>
-                    <div className="text-gray-900">
-                      <span className="font-semibold">Analytical Method Validation - </span>
-                      {reportItem["Analytical Method Evaluation"]["Analytical Method Validation"]}
-                    </div>
-                  </div>
-                )}
-                
-                {reportItem["Analytical Method Evaluation"]["Specification Steps"] && (
-                  <div className="flex">
-                    <span className="mr-2 text-gray-900">▶</span>
-                    <div className="text-gray-900">
-                      <span className="font-semibold">Specification Steps - </span>
-                      {reportItem["Analytical Method Evaluation"]["Specification Steps"]}
-                    </div>
-                  </div>
-                )}
-                
-                {reportItem["Analytical Method Evaluation"]["OOS"] && (
-                  <div className="flex">
-                    <span className="mr-2 text-gray-900">▶</span>
-                    <div className="text-gray-900">
-                      <span className="font-semibold">OOS - </span>
-                      {reportItem["Analytical Method Evaluation"]["OOS"]}
-                    </div>
-                  </div>
-                )}
-                
-                {reportItem["Analytical Method Evaluation"]["Observation/Error"] && (
-                  <div className="flex">
-                    <span className="mr-2 text-gray-900">▶</span>
-                    <div className="text-gray-900">
-                      <span className="font-semibold">Observation/Error - </span>
-                      {reportItem["Analytical Method Evaluation"]["Observation/Error"]}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+      {/* Introduction paragraph */}
+      <div className="p-4 text-sm">
+        <p className="text-gray-900">
+          Basis the verification of Track wise history from 22 Feb 2022 to 23 Feb 2023 for the OOS incidents in poloxamer content at the stage of 'Kolliphor P188 bio 3% stock' in process, the details are as follows
+        </p>
+      </div>
+
+      {/* Incident 1 */}
+      <div className="p-4 border-b border-gray-300">
+        <div className="space-y-2">
+          <div>
+            <span className="font-light text-[#0476CB] underline">1.PR#60446</span>
           </div>
-        )}
+          <div>
+            <span className="">Root Cause: </span>
+            <span className="text-gray-900">Dilution related error while working on lower concentration/ low sample volume.</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="">Contribution factor: </span>
+            <span className="text-gray-900">i. Though analyst has performed the test as per STP, analyst Ms Z (Employee ID: 130078) misses her opportunity to choose appropriate pipette while working on low sample volumes.</span>
+          </div>
+          <div>
+            <span className="">Status: </span>
+            <span className="text-gray-900">OOS closed on 26 May 2022</span>
+          </div>
+          <div>
+            <span className="">CAPA: </span>
+            <span className="text-[#0476CB] underline">75038</span>
+          </div>
+        </div>
+      </div>
+
+
+
+      {/* Incident 2 */}
+      <div className="p-4">
+        <div className="space-y-2">
+          <div>
+            <span className="font-light text-[#0476CB] underline">2.PR#74512</span>
+          </div>
+          <div>
+            <span className="">Root Cause: </span>
+            <span className="text-gray-900">Detector performance was not found repeatable as CAD technique is nebulization technique which involves variable parameters</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="">Contribution factor: </span>
+            <span className="text-gray-900">i. Preventive maintenance with kit for applicable Parts replacement of CAD detector being performed annually once or servicing for any breakdown.</span>
+          </div>
+          <div>
+            <span className="">Status: </span>
+            <span className="text-gray-900">OOS closed on 04 Jan 2023</span>
+          </div>
+          <div>
+            <span className="">CAPA: </span>
+            <span className="text-gray-900">NA</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
