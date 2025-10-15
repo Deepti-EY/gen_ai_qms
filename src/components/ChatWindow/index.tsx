@@ -53,9 +53,10 @@ interface Props {
 }
 
 const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
-  const [history, setHistory] = useState<{ user?: string; bot?: string; thinking?: boolean }[]>([]);
+  const [history, setHistory] = useState<{ user?: string; bot?: string | string[]; thinking?: boolean; checkbox?: boolean }[]>([]);
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: number }>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
@@ -70,7 +71,7 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
 
   const showEmptyState = history.length === 0;
 
-  const ensureBotArray = (bot: string): string[] => {
+  const ensureBotArray = (bot: string | string[]): string[] => {
     if (Array.isArray(bot)) return bot.map((b) => (typeof b === "string" ? b : String(b)));
     if (bot == null) return [];
     return [String(bot)];
@@ -111,17 +112,32 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
           onReportUpdate(step.data.reportitem ?? null, step.slide, isFinalForSlide);
         }
 
-        // show each message sequentially
-        for (let m = 0; m < botMessages.length; m++) {
+        // show message with checkbox options if checkbox is true, otherwise show sequentially
+        if (step.data.checkbox && botMessages.length > 1) {
+          // Show all options in one message with checkboxes
           setHistory((prev) => [...prev, { thinking: true }]);
-          await sleep(m === 0 ? FIRST_DELAY : FOLLOW_UP_DELAY);
+          await sleep(FIRST_DELAY);
           setHistory((prev) => {
             const updated = [...prev];
-            updated[updated.length - 1] = { bot: botMessages[m] ?? "" };
+            updated[updated.length - 1] = { 
+              bot: botMessages, 
+              checkbox: step.data.checkbox 
+            };
             return updated;
           });
-          lastProcessedIndex = i; // mark that we displayed this step (lastProcessedIndex refers to flattened step)
+        } else {
+          // show each message sequentially (original behavior)
+          for (let m = 0; m < botMessages.length; m++) {
+            setHistory((prev) => [...prev, { thinking: true }]);
+            await sleep(m === 0 ? FIRST_DELAY : FOLLOW_UP_DELAY);
+            setHistory((prev) => {
+              const updated = [...prev];
+              updated[updated.length - 1] = { bot: botMessages[m] ?? "" };
+              return updated;
+            });
+          }
         }
+        lastProcessedIndex = i; // mark that we displayed this step (lastProcessedIndex refers to flattened step)
       }
 
       i += 1;
@@ -168,6 +184,49 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
     }
   };
 
+  const handleCheckboxClick = async (messageIdx: number, optionIdx: number) => {
+    if (isProcessing) return;
+    
+    // Update selected option
+    setSelectedOptions(prev => ({
+      ...prev,
+      [messageIdx]: optionIdx
+    }));
+
+    // Get the selected option text
+    const historyItem = history[messageIdx];
+    if (historyItem.bot && Array.isArray(historyItem.bot)) {
+      const selectedText = historyItem.bot[optionIdx];
+      
+      // Add user message and continue processing
+      setHistory((prev) => [...prev, { user: selectedText }]);
+      
+      const next = await processFromIndex(stepIdx);
+      setStepIdx(next);
+    }
+  };
+
+  const handleProceedClick = async () => {
+    if (isProcessing) return;
+    
+    // Add a user message indicating they clicked proceed
+    setHistory((prev) => [...prev, { user: "Proceed" }]);
+    
+    // Continue processing from current step
+    const next = await processFromIndex(stepIdx);
+    setStepIdx(next);
+  };
+
+  const shouldShowProceedButton = (botMessage: string | string[]): boolean => {
+    if (typeof botMessage === 'string') {
+      return botMessage.toLowerCase().includes('proceed');
+    }
+    if (Array.isArray(botMessage) && botMessage.length > 0) {
+      return botMessage[0].toLowerCase().includes('proceed');
+    }
+    return false;
+  };
+
   return (
     <div className="flex flex-col w-full h-full items-center text-sm overflow-hidden">
       {showEmptyState ? (
@@ -192,7 +251,45 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate }) => {
                 {(item.thinking || item.bot) ? (
                   <div className="flex justify-start mt-2">
                     <div className="bg-white px-5 py-3 rounded-xl shadow max-w-lg break-words">
-                      {item.thinking ? <div className="text-gray-400 italic">Thinking...</div> : <div className="text-gray-900">{item.bot}</div>}
+                      {item.thinking ? (
+                        <div className="text-gray-400 italic">Thinking...</div>
+                      ) : item.checkbox && Array.isArray(item.bot) ? (
+                        <div className="text-gray-900 space-y-2">
+                          <div className="mb-3">{item.bot[0]}</div>
+                          <div className="space-y-2">
+                            {item.bot.slice(1).map((option, optionIdx) => (
+                              <div 
+                                key={optionIdx} 
+                                className="flex items-start gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                                onClick={() => handleCheckboxClick(idx, optionIdx + 1)}
+                              >
+                                <div className="flex-shrink-0 mt-0.5">
+                                  <input 
+                                    type="checkbox" 
+                                    checked={selectedOptions[idx] === optionIdx + 1}
+                                    onChange={() => {}} // Handled by onClick
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                  />
+                                </div>
+                                <div className="text-gray-900 text-sm leading-relaxed">{option}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : shouldShowProceedButton(item.bot) ? (
+                        <div className="text-gray-900 space-y-3">
+                          <div>{typeof item.bot === 'string' ? item.bot : item.bot[0]}</div>
+                          <button
+                            onClick={handleProceedClick}
+                            disabled={isProcessing}
+                            className="bg-black hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                          >
+                            Proceed
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-gray-900">{item.bot}</div>
+                      )}
                     </div>
                   </div>
                 ) : null}

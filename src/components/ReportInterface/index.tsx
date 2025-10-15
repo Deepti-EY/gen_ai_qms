@@ -538,12 +538,6 @@ const Slide5Template = ({
             </div>
           </div>
         </div>
-
-    
-
-  
-
-        {/* Render the button at the very bottom */}
         {showQualityButton && (
           <div className="mt-6">
             <div

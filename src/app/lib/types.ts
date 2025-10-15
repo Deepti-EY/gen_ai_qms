@@ -5,7 +5,8 @@ export type ReportItemData = Record<string, any> | null;
 
 export interface ChatMessage {
   human: string | null;
-  bot: string ; // Bot can respond with multiple messages
+  bot: string[] | string; // Bot can respond with multiple messages
+  checkbox?: boolean;
   report: boolean;
   reportitem?: ReportItemData;
 }
