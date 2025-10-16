@@ -59,8 +59,15 @@ interface Props {
 }
 
 const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
-  const [history, setHistory] = useState<{ user?: string; bot?: string | string[]; thinking?: boolean; checkbox?: boolean }[]>([]);
-  const [stepIdx, setStepIdx] = useState<number>(0);
+  // Initialize with the first bot message from Slide1
+  const [history, setHistory] = useState<{ user?: string; bot?: string | string[]; thinking?: boolean; checkbox?: boolean }[]>(() => {
+    const slide1Data = RESPONSES.Slides["Slide1"][0][0];
+    return [{
+      bot: slide1Data.bot,
+      checkbox: slide1Data.checkbox
+    }];
+  });
+  const [stepIdx, setStepIdx] = useState<number>(1); // Start from index 1 since we already show the first message
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [selectedOptions, setSelectedOptions] = useState<{ [key: number]: number }>({});
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +82,7 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
     });
   }, [history]);
 
-  const showEmptyState = history.length === 0;
+  const showEmptyState = false; // Always show chat interface since we initialize with default message
 
   const ensureBotArray = (bot: string | string[]): string[] => {
     if (Array.isArray(bot)) return bot.map((b) => (typeof b === "string" ? b : String(b)));
@@ -91,6 +98,11 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
     let i = startIdx;
     const FIRST_DELAY = 1000;
     const FOLLOW_UP_DELAY = 600;
+
+    // Skip the first step (index 0) since we already show it by default
+    if (i === 0) {
+      i = 1;
+    }
 
     while (i < chatSteps.length) {
       const step = chatSteps[i];
@@ -176,7 +188,9 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
 
     const start = typeof map.flattenedIndex === "number" ? map.flattenedIndex : -1;
     if (start >= 0) {
-      const next = await processFromIndex(start, map.botMsg);
+      // For Slide1, start from index 1 since we already show the default message
+      const adjustedStart = map.slide === "Slide1" ? 1 : start;
+      const next = await processFromIndex(adjustedStart, map.botMsg);
       // ensure report update for mapping entry if provided (processFromIndex also calls it already)
       if (map.reportItem) {
         const isFinalForSlide = start === lastIndexOfSlide("Slide5");
@@ -191,25 +205,45 @@ const ChatWindow: React.FC<Props> = ({ onReportUpdate, currentReportItem }) => {
   const handleCheckboxClick = async (messageIdx: number, optionIdx: number) => {
     if (isProcessing) return;
     
-  
     setSelectedOptions(prev => ({
       ...prev,
       [messageIdx]: optionIdx
     }));
 
-
     const historyItem = history[messageIdx];
     if (historyItem.bot && Array.isArray(historyItem.bot)) {
       const selectedText = historyItem.bot[optionIdx];
       
-   
       setHistory((prev) => [...prev, { user: selectedText }]);
       
+      // Check if this is the initial Slide1 message and show report for "Sure, I would like to go ahead with the investigation"
+      if (messageIdx === 0 && selectedText === "Sure, I would like to go ahead with the investigation") {
+        const slide1Data = RESPONSES.Slides["Slide1"][0][0];
+        if (slide1Data.report && slide1Data.reportitem) {
+          onReportUpdate(slide1Data.reportitem, "Slide1", false);
+        }
+        
+        // Continue with the normal flow
+        const next = await processFromIndex(stepIdx);
+        setStepIdx(next);
+        return;
+      }
+
+      // Check if user selected CAPA generation option
+      if (selectedText === "The assigned root cause is confirmed and should be taken ahead for the CAPA generation.") {
+        // Find the corresponding step in Slide5 that contains CAPA generation data
+        const slide5Steps = RESPONSES.Slides["Slide5"];
+        for (const stepArr of slide5Steps) {
+          const step = stepArr[0];
+          if (step.human === selectedText && step.report && step.reportitem) {
+            onReportUpdate(step.reportitem, "Slide5", false);
+            break;
+          }
+        }
+      }
 
       if (selectedText === "Proceed to draft the OOS report") {
-
         onReportUpdate(currentReportItem ?? null, "Slide5", true);
-
         setHistory((prev) => [...prev, { 
           bot: "Please click the 'OOS Investigation Report Draft 1' button below to generate and download the report." 
         }]);

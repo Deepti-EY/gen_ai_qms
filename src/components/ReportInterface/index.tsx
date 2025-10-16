@@ -483,7 +483,11 @@ const Slide5Template = ({
   reportItem: ReportItemData;
   showQualityButton: boolean;
   onDownload: () => void;
-}) => (  <div className="flex h-full w-full p-6">
+}) => {
+  const hasCAPA = (ri?: ReportItemData): boolean => !!(ri && ri["CAPA Generation"] && Object.keys(ri["CAPA Generation"]).length > 0);
+  
+  return (
+  <div className="flex h-full w-full p-6">
     <div className="border-2 border-gray-300 rounded-lg w-full bg-[#F3F3F5] shadow overflow-y-auto">
       <div className="p-4">
         {/* Final root cause Section - TOP */}
@@ -505,39 +509,44 @@ const Slide5Template = ({
         </div>
 
         {/* CAPA Generation Section - MIDDLE */}
-        <div className="mb-6">
-          <div className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3">
-            <div className="font-bold">CAPA generation</div>
-          </div>
-          
-          <div className="space-y-4">
-            {/* Corrective Actions */}
-            <div>
-              <div className="text-black mb-2">1. Corrective actions:</div>
-              <div className="ml-4 space-y-1">
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">b)</span>
-                  <div className="text-gray-900">Training to be imparted to the analysts to be more vigilant while performing the dilutions.</div>
-                </div>
-                <div className="flex">
-                  <span className="mr-2 text-gray-900">c)</span>
-                  <div className="text-gray-900">Version No:5.0 is revised in line with the STP, to scale up dilution without changing the final concentration.</div>
-                </div>
-              </div>
+        {hasCAPA(reportItem) && (
+          <div className="mb-6">
+            <div className="bg-[#d1ebfe] text-black px-4 py-2 text-center mb-3">
+              <div className="font-bold">CAPA generation</div>
             </div>
+            
+            <div className="space-y-4">
+              {/* Corrective Actions */}
+              {reportItem?.["CAPA Generation"]?.["Corrective Actions"] && (
+                <div>
+                  <div className="text-black mb-2">1. Corrective actions:</div>
+                  <div className="ml-4 space-y-1">
+                    {(reportItem["CAPA Generation"]["Corrective Actions"] as string[]).map((action, index) => (
+                      <div key={index} className="flex">
+                        <span className="mr-2 text-gray-900">{String.fromCharCode(98 + index)})</span>
+                        <div className="text-gray-900">{action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-            {/* Preventive Actions */}
-            <div>
-              <div className=" text-black mb-2">2. Preventive actions:</div>
-              <div className="ml-4 space-y-1">
-                <div className="flex">
- 
-                  <div className="text-gray-900">Version No:5.0 has explicit instructions to perform the dilutions.</div>
+              {/* Preventive Actions */}
+              {reportItem?.["CAPA Generation"]?.["Preventive Actions"] && (
+                <div>
+                  <div className="text-black mb-2">2. Preventive actions:</div>
+                  <div className="ml-4 space-y-1">
+                    {(reportItem["CAPA Generation"]["Preventive Actions"] as string[]).map((action, index) => (
+                      <div key={index} className="flex">
+                        <div className="text-gray-900">{action}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
-        </div>
+        )}
         {showQualityButton && (
           <div className="mt-6">
             <div
@@ -551,7 +560,8 @@ const Slide5Template = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 /* Helper - flatten and fallback printer */
 const buildPrintableLines = (obj: unknown, indent = 0): string[] => {
@@ -619,6 +629,8 @@ const ReportInterface: React.FC<{
   }, []);
 
   // helpers to detect whether a section has meaningful content
+  const hasCAPA = (ri?: ReportItemData): boolean => !!(ri && ri["CAPA Generation"] && Object.keys(ri["CAPA Generation"]).length > 0);
+  
   const hasSummary = (ri?: ReportItemData): boolean => {
     if (!ri) return false;
     if (ri.Title || ri.PRN || ri["Current State"]) return true;
@@ -645,8 +657,6 @@ const ReportInterface: React.FC<{
 
   const hasPastIncidents = (ri?: ReportItemData): boolean =>
     !!(ri && Array.isArray(ri["Past Incidents"]) && ri["Past Incidents"].length > 0);
-
-  const hasCAPA = (ri?: ReportItemData): boolean => !!(ri && ri["CAPA Generation"] && Object.keys(ri["CAPA Generation"]).length > 0);
 
   const generatePDF = async () => {
     if (allReportItems.length === 0) {

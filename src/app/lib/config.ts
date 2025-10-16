@@ -10,7 +10,7 @@ export const RESPONSES: ResponsesConfig = {
     "Slide1": [
       [
         {
-          "human": "I want to create a OOS report basis the results observed in poloxamer content for ZTS-00508841",
+          "human": null,
           "bot": [
             "Basis your selection of the open OOS.  Please find the data gathered on the OOS incident.Kindly confirm on the preliminary data generated. ",
             "Sure, I would like to go ahead with the investigation",
@@ -244,15 +244,7 @@ export const RESPONSES: ResponsesConfig = {
               "Basis the results obtained during the verification of the methodologies, concentration of sample is equal to defined sample preparation concentrations as per STP.",
               "The method was found to precise and equivalent and probable variation is in turn due to calibration curve characteristics involving complex preparations in terms of lower dilutions [(0.334 ml to 10 ml with Micropipette)] Which has an impact on the quantification of Poloxamer. "
             ],
-            "CAPA Generation": {
-              "Corrective Actions": [
-                "Training to be imparted to the analysts to be more vigilant while performing the dilutions.",
-                "Version No: 5.0 is revised in line with the X and Y STP, to scale up dilution without changing the final concentration."
-              ],
-              "Preventive Actions": [
-                "Version No: 5.0 has explicit instructions to perform the dilutions."
-              ]
-            }
+          
           }
         }
       ],
@@ -265,7 +257,22 @@ export const RESPONSES: ResponsesConfig = {
             "Proceed to draft the OOS report"
           ],
           "checkbox": true,
-          "report": false
+          "report": true,
+          "reportitem": {
+            "Final root cause": [
+              "Basis the results obtained during the verification of the methodologies, concentration of sample is equal to defined sample preparation concentrations as per STP.",
+              "The method was found to precise and equivalent and probable variation is in turn due to calibration curve characteristics involving complex preparations in terms of lower dilutions [(0.334 ml to 10 ml with Micropipette)] Which has an impact on the quantification of Poloxamer. "
+            ],
+            "CAPA Generation": {
+              "Corrective Actions": [
+                "Training to be imparted to the analysts to be more vigilant while performing the dilutions.",
+                "Version No: 5.0 is revised in line with the X and Y STP, to scale up dilution without changing the final concentration."
+              ],
+              "Preventive Actions": [
+                "Version No: 5.0 has explicit instructions to perform the dilutions."
+              ]
+            }
+          }
         }
       ]
     ]

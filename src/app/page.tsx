@@ -5,9 +5,6 @@ import ReportInterface from "@/components/ReportInterface";
 import { useState } from "react";
 import { RESPONSES } from "./lib/config";
 import type { ChatStep, ReportItemData } from "./lib/types";
-// Import your JSON here
-
-// Flatten slides as per above
 const chatSteps: ChatStep[] = [];
 Object.entries(RESPONSES.Slides).forEach(([slide, arr]) => {
   arr.forEach((itemArr) => {
@@ -16,11 +13,9 @@ Object.entries(RESPONSES.Slides).forEach(([slide, arr]) => {
 });
 
 export default function Home() {
-  const [reportItem, setReportItem] = useState<ReportItemData>(null);
-  const [slide, setSlide] = useState<string>("");
+  const [reportItem, setReportItem] = useState<ReportItemData>(RESPONSES.Slides["Slide1"][0][0].reportitem || null);
+  const [slide, setSlide] = useState<string>("Slide1");
   const [showQualityButton, setShowQualityButton] = useState<boolean>(false);
-
-  // updated to receive isFinalForSlide flag
   function handleReportUpdate(item: ReportItemData | null, slideKey: string, isFinalForSlide?: boolean) {
     setReportItem(item);
     setSlide(slideKey);
