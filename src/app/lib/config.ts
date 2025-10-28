@@ -27,7 +27,7 @@ export const RESPONSES: ResponsesConfig = {
             "General Information": {
               "Record Number": "ABC/GMP/OOS/2023-0044",
               "Initiating Department": "Mr A",
-              "Initial TCD": "23-Feb-2023",
+              "Initial TCD": "25-Feb-2023",
               "Actual Closure Date": "",
               "OOS Department": "Quality Control",
               "Operating Unit": "Unit X",
