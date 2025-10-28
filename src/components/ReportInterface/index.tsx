@@ -431,47 +431,27 @@ const Slide4Template = ({ reportItem }: { reportItem: ReportItemData }) => (
 
     
 
-        {/* Root cause Checklists Section */}
-        <div className="mb-6">
+        {/* Root cause Checklists Section - Only show if Root cause Checklists data is present */}
+        {reportItem?.["Root cause Checklists"] && (
           <div className="mb-6">
-            <div className="font-semibold text-xl bg-[#D1EBFE] text-gray-700 text-center w-full">Root cause Checklists</div>
-          </div>
-          
-          {/* Checklist Items */}
-          <div className="space-y-3">
-            <div className="flex items-start">
-              <span className="mr-3 text-black text-xl">✓</span>
-              <div className="text-gray-900">
-                <span className="font-semibold">Root Cause1:</span> 
-                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist1</span>
-              </div>
+            <div className="mb-6">
+              <div className="font-semibold text-xl bg-[#D1EBFE] text-gray-700 text-center w-full">Root cause Checklists</div>
             </div>
             
-            <div className="flex items-start">
-              <span className="mr-3 text-black text-xl">✓</span>
-              <div className="text-gray-900">
-                <span className="font-semibold">Root Cause2:</span> 
-                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist2</span>
-              </div>
-            </div>
-            
-            <div className="flex items-start">
-              <span className="mr-3 text-black text-xl">✓</span>
-              <div className="text-gray-900">
-                <span className="font-semibold">Root Cause3:</span> 
-                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist3</span>
-              </div>
-            </div>
-            
-            <div className="flex items-start">
-              <span className="mr-3 text-black text-xl">✓</span>
-              <div className="text-gray-900">
-                <span className="font-semibold">Root Cause4:</span> 
-                <span className="text-[#0476CB] underline cursor-pointer ml-2">Checklist4</span>
-              </div>
+            {/* Checklist Items */}
+            <div className="space-y-3">
+              {(reportItem["Root cause Checklists"] as string[]).map((checklist, index) => (
+                <div key={index} className="flex items-start">
+                  <span className="mr-3 text-black text-xl">✓</span>
+                  <div className="text-gray-900">
+                    <span className="font-semibold">Root Cause{index + 1}:</span> 
+                    <span className="text-[#0476CB] underline cursor-pointer ml-2">{checklist}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   </div>

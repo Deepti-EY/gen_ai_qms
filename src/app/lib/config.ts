@@ -201,9 +201,7 @@ export const RESPONSES: ResponsesConfig = {
             ]
           }
         }
-      ]
-    ],
-    "Slide5": [
+      ],
       [
         {
           "human": "The probable root cause seems fine, Kindly proceed with the checklist generation",
@@ -225,10 +223,13 @@ export const RESPONSES: ResponsesConfig = {
               "Checklist 2",
               "Checklist 3",
               "Checklist 4"
-          ]
+            ]
           }
         }
-      ],
+      ]
+    ],
+    "Slide5": [
+      
       [
         {
           "human": "The retests are performed as per the checklist and below are the results \nRoot Cause 1: No appropriate root cause identified \nRoot Cause 2: Sample preparation and retest was performed by using the scaled up sample and was found to be within 29.4 ±1.5 g/L, meeting the specification limit. Please comment on the obtained results ",
