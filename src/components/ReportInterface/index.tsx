@@ -363,12 +363,14 @@ const Slide3Template = ({ reportItem }: { reportItem: ReportItemData }) => (
           </ul>
         </div>
 
-        {/* Obvious Error Identified Box */}
-        <div className="border border-black p-4 mb-4">
-          <div className="font-bold text-black">Obvious Error Identified: <span className="font-normal text-gray-900">No</span></div>
-          <div className="font-bold text-black">If Other Obvious Error: <span className="font-normal text-gray-900">NA</span></div>
-          <div className="font-bold text-black">Evaluation Outcome: <span className="font-normal text-gray-900">Based on Phase 1A investigation no obvious error was identified for the reported OOS. Further investigation shall be performed to identified the assignable cause.</span></div>
-        </div>
+        {/* Obvious Error Identified Box - Only show if Evaluation Outcome data is present */}
+        {reportItem?.["Evaluation Outcome"] && (
+          <div className="border border-black p-4 mb-4">
+            <div className="font-bold text-black">Obvious Error Identified: <span className="font-normal text-gray-900">{reportItem["Evaluation Outcome"]["Obvious Error Identified"] || "No"}</span></div>
+            <div className="font-bold text-black">If Other Obvious Error: <span className="font-normal text-gray-900">{reportItem["Evaluation Outcome"]["If Other Obvious Error"] || "NA"}</span></div>
+            <div className="font-bold text-black">Evaluation Outcome: <span className="font-normal text-gray-900">{reportItem["Evaluation Outcome"]["Evaluation Outcome"] || "Based on Phase 1A investigation no obvious error was identified for the reported OOS. Further investigation shall be performed to identified the assignable cause."}</span></div>
+          </div>
+        )}
       </div>
     </div>
   </div>

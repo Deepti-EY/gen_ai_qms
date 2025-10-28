@@ -146,7 +146,7 @@ export const RESPONSES: ResponsesConfig = {
               "Instrument settings:" : "The instrument method was created by reviewer and the analyst has selected the desired method while executing the analysis.",
               "Sample with Batch No.:": "AA22000062 was recorded and no discrepancies were observed."
             }
-        }
+          }
       }
       ],
       [
@@ -175,7 +175,7 @@ export const RESPONSES: ResponsesConfig = {
               "If Other Obvious Error": "NA",
               "Evaluation Outcome": "Based on Phase 1A investigation no obvious error was identified for the report OOS Further investigation shall be performed to identified the assignable cause"
             }
-        }
+          }
         }
       ]
     ],
